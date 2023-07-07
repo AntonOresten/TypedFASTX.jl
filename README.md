@@ -18,7 +18,6 @@ To install the package, you can use the Julia package manager. From the Julia RE
 ```
 add TypedFASTX
 ```
-NOTE: TypedFASTX is not yet registered, so this will not work haha
 
 ## Usage
 Here is a basic example of how to use the package:
@@ -33,7 +32,7 @@ record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
 record1 == record2 == record3 # true
 ```
 
-Please refer to the documentation for more detailed information on how to use the TypedFASTX.jl package.
+Please refer to the (not yet written) documentation for more detailed information on how to use the TypedFASTX.jl package.
 
 ## Contributing
-Contributions are very welcome! I don't really know how that stuff works. GPT-4 suggests: "If you'd like to contribute, please fork the repository and use a feature branch."
+Contributions are very welcome! If you'd like to contribute, please fork the repository and use a feature branch.
