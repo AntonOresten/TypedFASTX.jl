@@ -6,7 +6,7 @@
 [![Coverage](https://codecov.io/gh/anton083/TypedFASTX.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/anton083/TypedFASTX.jl)
 <!-- [![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=master)](https://travis-ci.com/anton083/TypedFASTX.jl) -->
 
-TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using strongly typed records. It is largely based on [BioJulia's FASTX.jl package](https://github.com/BioJulia/FASTX.jl), whose records are un-typed, i.e. they are agnostic to the kind of data they contain. TypedFASTX.jl aims to enhances readability, reduce the potential for errors by enforcing type safety, and enable you to define different methods for different record types.
+TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using strongly typed records. It is largely based on [BioJulia's FASTX.jl package](https://github.com/BioJulia/FASTX.jl), whose records are un-typed, i.e. they are agnostic to the kind of data they contain. TypedFASTX.jl aims to enhance readability, reduce the potential for errors by enforcing type safety, and enable you to define different methods for different record types.
 
 ## Getting Started
 
