@@ -3,7 +3,7 @@
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://anton083.github.io/TypedFASTX.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://anton083.github.io/TypedFASTX.jl/dev/)
 [![Build Status](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml?query=branch%3Amaster)
-[![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=master)](https://travis-ci.com/anton083/TypedFASTX.jl)
+<!-- [![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=master)](https://travis-ci.com/anton083/TypedFASTX.jl) -->
 [![Coverage](https://codecov.io/gh/anton083/TypedFASTX.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/anton083/TypedFASTX.jl)
 
 TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using strongly typed records. It is largely based on BioJulia's FASTX.jl package, whose records are un-typed, i.e. they are agnostic to the kind of data they contain. TypedFASTX.jl aims to enhances readability, reduce the potential for errors by enforcing type safety, and enable you to define different methods for different record types.
