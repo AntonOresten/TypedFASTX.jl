@@ -3,9 +3,9 @@
 [![Latest Release](https://img.shields.io/github/release/anton083/TypedFASTX.jl.svg)](https://github.com/anton083/TypedFASTX.jl/releases/latest)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/license/MIT)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://anton083.github.io/TypedFASTX.jl/stable/)
-[![Status](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+[![Status](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/anton083/TypedFASTX.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/anton083/TypedFASTX.jl)
-<!-- [![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=master)](https://travis-ci.com/anton083/TypedFASTX.jl) -->
+<!-- [![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=main)](https://travis-ci.com/anton083/TypedFASTX.jl) -->
 
 TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using strongly typed records. It is largely based on BioJulia's [FASTX.jl](https://github.com/BioJulia/FASTX.jl) package, whose records are un-typed, i.e. they are agnostic to what kind of data they contain.
 TypedFASTX.jl aims to enhance readability and reduce potential errors when dealing with different types of biological sequences. It also enforces type safety and minimizes the likelihood of mistakes, by allowing you to define different methods for specific record types.
