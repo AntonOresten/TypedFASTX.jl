@@ -20,9 +20,13 @@ pkg> add TypedFASTX
 Here is a basic example of how to use the package:
 
 ```julia
-using TypedFASTX
+using TypedFASTX, BioSequences, FASTX
 
-rec1 = DNARecord(FASTARecord("Rick", "ACGTA"))
+record1 = DNARecord("Ricky", "ACGTA")
+record2 = TypedRecord("Ricky", dna"ACGTA")
+record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
+
+println(record1 == record2 == record3) # true
 ```
 
 Please refer to the documentation for more detailed information on how to use the TypedFASTX.jl package.
