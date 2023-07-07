@@ -13,7 +13,7 @@ TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using st
 To install the package, you can use the Julia package manager. From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
 
 ```julia
-pkg> add TypedFASTX
+import Pkg, Pkg.add("TypedFASTX") # NOTE: TypedFASTX is not yet registered
 ```
 
 ## Usage

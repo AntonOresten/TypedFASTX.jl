@@ -21,11 +21,7 @@ struct TypedRecord{T}
     end
 
     function TypedRecord{T}(record::TypedRecord{t}) where {T, t}
-        try
-            return TypedRecord{T}(record.identifier, record.sequence, record.quality)
-        catch
-            return TypedRecord{T}(record.identifier, String(record.sequence), record.quality)
-        end
+        return TypedRecord{T}(record.identifier, record.sequence, record.quality)
     end
 end
 

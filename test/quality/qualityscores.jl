@@ -9,4 +9,8 @@
     @test QualityScores(qs1) == qs1
     @test String(qs1) == "!!!!"
 
+    io = IOBuffer()
+    @test isnothing(show(io, qs1))
+    @test String(take!(io)) == "!!!!"
+
 end

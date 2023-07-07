@@ -1,6 +1,14 @@
 module TypedFASTX
 
     export
+        # probability.jl
+        error_prob_generator,
+        error_probs,
+        error_rate,
+
+        # qualityscores.jl
+        QualityScores,
+
         # typedrecord.jl
         TypedRecord,
         StringRecord,
@@ -8,13 +16,11 @@ module TypedFASTX
         RNARecord,
         AARecord,
 
-        # qualityscores.jl
-        QualityScores,
+        identifier,
+        sequence,
+        quality,
+        quality_values
 
-        # probability.jl
-        error_prob_generator,
-        error_probs,
-        error_rate
 
     using FASTX
     using BioSequences
