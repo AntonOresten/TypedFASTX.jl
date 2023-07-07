@@ -1,7 +1,7 @@
 name = "TypedFASTX"
 uuid = "6c3c8c82-ef46-460a-9a5a-30cbd93ae9ab"
 authors = ["Anton Sollman <anton.sollman@outlook.com>"]
-version = "0.1.1"
+version = "0.1.0"
 
 [deps]
 FASTX = "c2308a5c-f048-11e8-3e8a-31650f418d12"
