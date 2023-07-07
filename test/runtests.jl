@@ -17,4 +17,12 @@ using FASTX, BioSequences
         include("fastx-conversion.jl")
     end
 
+    @testset "README Example" begin
+        record1 = DNARecord("Ricky", "ACGTA")
+        record2 = TypedRecord("Ricky", dna"ACGTA")
+        record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
+
+        @test record1 == record2 == record3
+    end
+
 end

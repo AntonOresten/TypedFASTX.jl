@@ -1,5 +1,3 @@
-# this might not belong in typedrecords. maybe move outside?
-
 @inline phred_to_p(q::Int8) = exp10(q / -10.0)
 
 @inline solexa_to_p(q::Int8) = 1 / (1 + exp10(q / 10.0))

@@ -1,4 +1,3 @@
-# may be good to check quality values, although they'll most likely go through a FASTQRecord first
 struct QualityScores
     values::Vector{Int8}
     encoding::QualityEncoding

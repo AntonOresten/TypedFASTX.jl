@@ -8,15 +8,16 @@
 <!-- [![Build Status](https://travis-ci.com/anton083/TypedFASTX.jl.svg?branch=master)](https://travis-ci.com/anton083/TypedFASTX.jl) -->
 
 TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using strongly typed records. It is largely based on BioJulia's [FASTX.jl](https://github.com/BioJulia/FASTX.jl) package, whose records are un-typed, i.e. they are agnostic to what kind of data they contain. TypedFASTX.jl aims to enhance readability and reduce potential errors when dealing with different types of biological sequences. It also enforces type safety and minimizes the likelihood of mistakes, by allowing you to define different methods for specific record types.
+Furthermore, TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl's](https://github.com/BioJulia/BioSequences.jl) LongSequence type stores information more efficiently.
 
 ## Install
 
 To install the package, you can use the Julia package manager. From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
 
-```julia
+```
 add TypedFASTX
 ```
-NOTE: TypedFASTX is not yet registered, so this will not work.
+NOTE: TypedFASTX is not yet registered, so this will not work haha
 
 ## Usage
 Here is a basic example of how to use the package:
@@ -28,10 +29,10 @@ record1 = DNARecord("Ricky", "ACGTA")
 record2 = TypedRecord("Ricky", dna"ACGTA")
 record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
 
-println(record1 == record2 == record3) # true
+record1 == record2 == record3 # true
 ```
 
 Please refer to the documentation for more detailed information on how to use the TypedFASTX.jl package.
 
 ## Contributing
-Contributions are very welcome! I don't really know how that stuff works; GPT-4 suggests: "If you'd like to contribute, please fork the repository and use a feature branch."
+Contributions are very welcome! I don't really know how that stuff works. GPT-4 suggests: "If you'd like to contribute, please fork the repository and use a feature branch."
