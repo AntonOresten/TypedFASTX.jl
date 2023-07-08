@@ -1,11 +1,9 @@
 name: Documentation
-
 on:
   push:
     branches:
       - dev
     tags: '*'
-
 jobs:
   build:
     permissions:
