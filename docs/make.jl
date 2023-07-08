@@ -22,5 +22,4 @@ makedocs(;
 deploydocs(;
     repo="github.com/anton083/TypedFASTX.jl.git",
     devbranch="main",
-    deploy=true,
 )
