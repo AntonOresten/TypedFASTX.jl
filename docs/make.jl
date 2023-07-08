@@ -6,7 +6,7 @@ DocMeta.setdocmeta!(TypedFASTX, :DocTestSetup, :(using TypedFASTX); recursive=tr
 makedocs(;
     modules=[TypedFASTX],
     authors="Anton Sollman <anton.sollman@outlook.com>",
-    repo="https://github.com/anton083/TypedFASTX.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/anton083/TypedFASTX.jl.git",
     sitename="TypedFASTX.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
@@ -20,6 +20,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/anton083/TypedFASTX.jl",
-    devbranch="dev",
+    repo="github.com/anton083/TypedFASTX.jl.git",
+    devbranch="main",
+    deploy=true,
 )
