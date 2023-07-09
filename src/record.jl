@@ -1,27 +1,56 @@
-struct TypedRecord{T}
+"""
+    TypedRecord{T}
+
+    
+    TypedRecord{T}(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
+
+constructs a `TypedRecord` with given id, seq, and optional qual.
+
+    TypedRecord(id::S, seq::T, qual::Q = nothing) where {S, T, Q}`
+
+constructs a `TypedRecord` with the type of seq inferred from the input.
+
+    TypedRecord{T}(id::S, seq::t, qual::Q = nothing) where {S, T, t, Q}`
+
+constructs a `TypedRecord` with seq coerced to type `T`.
+    
+    TypedRecord{T}(record::TypedRecord{t}) where {T, t}
+
+converts an existing `TypedRecord` to a new `TypedRecord` with sequence type `T`.
+
+A type to represent a generic biological sequence record. 
+
+### Fields
+- `identifier::String`: The unique identifier for the sequence.
+- `sequence::T`: The biological sequence. It can be of type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
+- `quality::Union{Nothing, QualityScores}`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
+"""
+struct TypedRecord{T, Q <: QualityTypes}
     identifier::String
     sequence::T
-    quality::Union{Nothing, QualityScores}
+    quality::Q
 
-    function TypedRecord{T}(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
-        qs = QualityScores(qual)
-        if !isnothing(qs)
+    function TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where {T}
+        if qual isa NoQuality
+            new{T, NoQuality}(id, seq, qual)
+        else
+            qs = QualityScores(qual)
             seq_len, qs_len = length(seq), length(qs)
             @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
+            new{T, typeof(qs)}(id, seq, qs)
         end
-        new{T}(String(id), seq, qs)
     end
 
-    function TypedRecord(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
+    function TypedRecord(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where {T}
         TypedRecord{T}(id, seq, qual)
     end
 
-    function TypedRecord{T}(id::S, seq::t, qual::Q = nothing) where {S, T, t, Q}
+    function TypedRecord{T}(id::AbstractString, seq::Any, qual::Any = NO_QUALITY) where {T}
         TypedRecord{T}(id, T(seq), qual)
     end
 
     function TypedRecord{T}(record::TypedRecord{t}) where {T, t}
-        return TypedRecord{T}(record.identifier, record.sequence, record.quality)
+        TypedRecord{T}(record.identifier, record.sequence, record.quality)
     end
 end
 
@@ -43,7 +72,7 @@ sequence(record::TypedRecord) = record.sequence
 sequence(::Type{T}, record::TypedRecord) where T = T(record.sequence)
 
 quality(record::TypedRecord) = record.quality
-has_quality(record::TypedRecord) = !isnothing(record.quality)
+has_quality(record::TypedRecord) = record.quality isa QualityScores
 quality_values(record::TypedRecord) = has_quality(record) ? record.quality.values : nothing
 
 """

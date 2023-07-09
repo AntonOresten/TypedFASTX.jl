@@ -5,15 +5,15 @@ using FASTX, BioSequences
 
 @testset "TypedFASTX.jl" begin
 
-    @testset "typedrecords" begin
+    @testset "quality" begin
         include("quality/quality.jl")
     end
 
-    @testset "typedrecords" begin
-        include("typedrecord.jl")
+    @testset "records" begin
+        include("record.jl")
     end
 
-    @testset "typedrecords" begin
+    @testset "fastx-conversion" begin
         include("fastx-conversion.jl")
     end
 
