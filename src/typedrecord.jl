@@ -1,22 +1,49 @@
+"""
+    TypedRecord{T}
+
+    
+    TypedRecord{T}(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
+
+constructs a `TypedRecord` with given id, seq, and optional qual.
+
+    TypedRecord(id::S, seq::T, qual::Q = nothing) where {S, T, Q}`
+
+constructs a `TypedRecord` with the type of seq inferred from the input.
+
+    TypedRecord{T}(id::S, seq::t, qual::Q = nothing) where {S, T, t, Q}`
+
+constructs a `TypedRecord` with seq coerced to type `T`.
+    
+    TypedRecord{T}(record::TypedRecord{t}) where {T, t}
+
+converts an existing `TypedRecord` to a new `TypedRecord` with sequence type `T`.
+
+A type to represent a generic biological sequence record. 
+
+### Fields
+- `identifier::String`: The unique identifier for the sequence.
+- `sequence::T`: The biological sequence. It can be of type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
+- `quality::Union{Nothing, QualityScores}`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
+"""
 struct TypedRecord{T}
     identifier::String
     sequence::T
     quality::Union{Nothing, QualityScores}
 
-    function TypedRecord{T}(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
+    function TypedRecord{T}(id::String, seq::T, qual::Q = nothing) where {T, Q}
         qs = QualityScores(qual)
         if !isnothing(qs)
             seq_len, qs_len = length(seq), length(qs)
             @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
         end
-        new{T}(String(id), seq, qs)
+        new{T}(id, seq, qs)
     end
 
-    function TypedRecord(id::S, seq::T, qual::Q = nothing) where {S, T, Q}
+    function TypedRecord(id::String, seq::T, qual::Q = nothing) where {T, Q}
         TypedRecord{T}(id, seq, qual)
     end
 
-    function TypedRecord{T}(id::S, seq::t, qual::Q = nothing) where {S, T, t, Q}
+    function TypedRecord{T}(id::String, seq::t, qual::Q = nothing) where {T, t, Q}
         TypedRecord{T}(id, T(seq), qual)
     end
 
