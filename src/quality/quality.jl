@@ -11,3 +11,11 @@ qualformat_to_quality_encoding(s::Symbol) = QUALITY_ENCODINGS[Symbol(lowercase(S
 
 include("qualityscores.jl")
 include("probability.jl")
+
+"Used in place of QualityScores to denote lack of quality scores."
+struct NoQuality end
+
+"A constant instance of the type `NoQuality`."
+const NO_QUALITY = NoQuality()
+
+const QualityTypes = Union{NoQuality, QualityScores}

@@ -25,30 +25,32 @@ A type to represent a generic biological sequence record.
 - `sequence::T`: The biological sequence. It can be of type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
 - `quality::Union{Nothing, QualityScores}`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
 """
-struct TypedRecord{T}
+struct TypedRecord{T, Q <: QualityTypes}
     identifier::String
     sequence::T
-    quality::Union{Nothing, QualityScores}
+    quality::Q
 
-    function TypedRecord{T}(id::String, seq::T, qual::Q = nothing) where {T, Q}
-        qs = QualityScores(qual)
-        if !isnothing(qs)
+    function TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where {T}
+        if qual isa NoQuality
+            return new{T, NoQuality}(id, seq, qual)
+        else
+            qs = QualityScores(qual)
             seq_len, qs_len = length(seq), length(qs)
             @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
+            return new{T, typeof(qs)}(id, seq, qs)
         end
-        new{T}(id, seq, qs)
     end
 
-    function TypedRecord(id::String, seq::T, qual::Q = nothing) where {T, Q}
+    function TypedRecord(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where {T}
         TypedRecord{T}(id, seq, qual)
     end
 
-    function TypedRecord{T}(id::String, seq::t, qual::Q = nothing) where {T, t, Q}
+    function TypedRecord{T}(id::AbstractString, seq::Any, qual::Any = NO_QUALITY) where {T}
         TypedRecord{T}(id, T(seq), qual)
     end
 
     function TypedRecord{T}(record::TypedRecord{t}) where {T, t}
-        return TypedRecord{T}(record.identifier, record.sequence, record.quality)
+        TypedRecord{T}(record.identifier, record.sequence, record.quality)
     end
 end
 

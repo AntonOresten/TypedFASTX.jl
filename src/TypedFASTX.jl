@@ -6,6 +6,9 @@ module TypedFASTX
         error_probs,
         error_rate,
 
+        # quality.jl
+        NoQuality,
+
         # qualityscores.jl
         QualityScores,
 
@@ -27,7 +30,7 @@ module TypedFASTX
     import Statistics: mean
 
     include("quality/quality.jl")
-    include("typedrecord.jl")
+    include("record.jl")
     include("fastx-conversion.jl")
 
 end

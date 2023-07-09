@@ -22,6 +22,6 @@ makedocs(;
 deploydocs(;
     repo="github.com/anton083/TypedFASTX.jl",
     branch = "gh-pages",
-    devbranch = "dev",
+    devbranch = "main",
     devurl = "https://anton083.github.io/TypedFASTX.jl/dev",
 )
