@@ -32,12 +32,12 @@ struct TypedRecord{T, Q <: QualityTypes}
 
     function TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where {T}
         if qual isa NoQuality
-            return new{T, NoQuality}(id, seq, qual)
+            new{T, NoQuality}(id, seq, qual)
         else
             qs = QualityScores(qual)
             seq_len, qs_len = length(seq), length(qs)
             @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
-            return new{T, typeof(qs)}(id, seq, qs)
+            new{T, typeof(qs)}(id, seq, qs)
         end
     end
 
@@ -72,7 +72,7 @@ sequence(record::TypedRecord) = record.sequence
 sequence(::Type{T}, record::TypedRecord) where T = T(record.sequence)
 
 quality(record::TypedRecord) = record.quality
-has_quality(record::TypedRecord) = !isnothing(record.quality)
+has_quality(record::TypedRecord) = record.quality isa QualityScores
 quality_values(record::TypedRecord) = has_quality(record) ? record.quality.values : nothing
 
 """
