@@ -83,15 +83,8 @@ Creates a generator of error probabilities for each character in the sequence.
 error_prob_generator(record::TypedRecord) = has_quality(record) ? error_prob_generator(record.quality) : nothing
 
 """
-    error_rate_generator(record::TypedRecord)
+    error_probs(record::TypedRecord)
 
 Creates a vector of error probabilities for each character in the sequence.
 """
 error_probs(record::TypedRecord) = has_quality(record) ? error_probs(record.quality) : nothing
-
-"""
-    error_rate(fastq_record::FASTQRecord)
-
-Returns the error rate of a record with quality scores.
-"""
-error_rate(record::TypedRecord) = has_quality(record) ? error_rate(record.quality) : nothing

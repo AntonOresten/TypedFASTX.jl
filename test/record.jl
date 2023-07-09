@@ -30,7 +30,8 @@
     @test all(<(1e-5), error_prob_generator(rec5))
 
     @test error_probs(rec4) == collect(error_prob_generator(rec4))
-    @test error_rate(rec4) == 1.0
-    @test error_rate(rec5) < 1e-5
+
+    rec6 = DNARecord("", "ACGT", QualityScores(";;;;", :solexa))
+    @test all(>(0.75), error_prob_generator(rec6))
 
 end

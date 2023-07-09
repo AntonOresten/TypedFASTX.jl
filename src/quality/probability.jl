@@ -10,5 +10,3 @@ error_prob_generator(qs::QualityScores) = let q_to_p = error_prob_function(qs.en
 end
 
 error_probs(qs::QualityScores) = error_prob_function(qs.encoding).(qs.values)
-
-error_rate(qs::QualityScores) = mean(error_prob_generator(qs))
