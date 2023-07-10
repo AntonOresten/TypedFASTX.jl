@@ -21,8 +21,8 @@ To install the package, you can use the Julia package manager. From the Julia RE
 add TypedFASTX
 ```
 
-## Usage
-Here is a basic example of how to use the package:
+## Example
+Here is a basic example of how you can reate DNA records (without qualities):
 
 ```julia
 using TypedFASTX, BioSequences, FASTX
