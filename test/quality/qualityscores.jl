@@ -13,4 +13,7 @@
     @test isnothing(show(io, qs1))
     @test String(take!(io)) == "!!!!"
 
+    @test isnothing(show(io, qs2))
+    @test String(take!(io)) == "@@@@"
+
 end

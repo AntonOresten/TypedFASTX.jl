@@ -1,6 +1,4 @@
 @testset "probability.jl" begin
-    
-
 
     @test TypedFASTX.error_prob_function(FASTQ.SANGER_QUAL_ENCODING) == TypedFASTX.phred_to_p
     @test TypedFASTX.error_prob_function(FASTQ.SOLEXA_QUAL_ENCODING) == TypedFASTX.solexa_to_p
