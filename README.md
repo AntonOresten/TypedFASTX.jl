@@ -37,4 +37,4 @@ record1 == record2 == record3 # true
 Please refer to the documentation for more detailed information on how to use the TypedFASTX.jl package.
 
 ## Contributing
-Contributions are very welcome! If you'd like to contribute, please fork the repository and use a feature branch.
+Contributions are very welcome! If you'd like to contribute, GPT-4 suggests forking the repository and using a feature branch.
