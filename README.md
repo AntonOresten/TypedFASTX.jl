@@ -1,4 +1,5 @@
-# <p align="right"> <img style="transform: scale(0.8);" width=400 height=200 src="./docs/sticker.svg" align="right" /> </p> TypedFASTX
+# <img width="40%" src="./docs/sticker.svg" align="right" /> TypedFASTX
+
 [![Latest Release](https://img.shields.io/github/release/anton083/TypedFASTX.jl.svg)](https://github.com/anton083/TypedFASTX.jl/releases/latest)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/license/MIT)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://anton083.github.io/TypedFASTX.jl/stable/)
