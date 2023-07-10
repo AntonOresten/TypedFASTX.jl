@@ -38,7 +38,7 @@ struct TypedRecord{T, Q <: AbstractQuality}
             qs = QualityScores(qual)
             seq_len, qs_len = length(seq), length(qs)
             @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
-            new{T, typeof(qs)}(id, seq, qs)
+            new{T, QualityScores}(id, seq, qs)
         end
     end
 
