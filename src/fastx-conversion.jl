@@ -6,10 +6,11 @@ function TypedRecord{T}(fasta_record::FASTARecord) where T
     TypedRecord{T}(id, seq)
 end
 
-function TypedRecord{T}(fastq_record::FASTQRecord; qualformat::Symbol = :sanger, keep_qual::Bool = true) where T
+function TypedRecord{T}(fastq_record::FASTQRecord, encoding_name::Symbol = :sanger, keep_qual::Bool = true) where T
+    encoding = encoding_name_to_quality_encoding(encoding_name)
     id = identifier(fastq_record)
     seq = sequence(T, fastq_record)
-    qual = keep_qual ? collect(quality_scores(fastq_record, qualformat)) : nothing
+    qual = keep_qual ? collect(quality_scores(fastq_record, encoding)) : nothing
     TypedRecord{T}(id, seq, qual)
 end
 

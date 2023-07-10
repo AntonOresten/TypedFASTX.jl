@@ -7,6 +7,7 @@ module TypedFASTX
 
         # quality.jl
         NoQuality,
+        NO_QUALITY,
 
         # qualityscores.jl
         QualityScores,

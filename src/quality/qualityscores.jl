@@ -1,4 +1,4 @@
-struct QualityScores
+struct QualityScores <: AbstractQuality
     values::Vector{Int8}
     encoding::QualityEncoding
 
@@ -6,13 +6,17 @@ struct QualityScores
         new(values, encoding)
     end
 
-    function QualityScores(str::String, qualformat::Symbol = :sanger)
+    function QualityScores(str::String, encoding::QualityEncoding = FASTQ.SANGER_QUAL_ENCODING)
         values = Vector{Int8}(undef, lastindex(str))
-        encoding = qualformat_to_quality_encoding(qualformat)
         for (i, x) in enumerate(codeunits(str))
             values[i] = FASTQ.decode_quality(encoding, x)
         end
-        new(values, encoding)
+        QualityScores(values, encoding)
+    end
+
+    function QualityScores(str::String, encoding_name::Symbol)
+        encoding = encoding_name_to_quality_encoding(encoding_name)
+        QualityScores(str, encoding)
     end
 end
 
