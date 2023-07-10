@@ -4,19 +4,19 @@
 
     TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
 
-constructs a `TypedRecord` with given id, seq, and optional qual.
+Constructs a `TypedRecord` with given id, seq, and optional qual.
 
     TypedRecord(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
 
-constructs a `TypedRecord` with the type of seq inferred from the input.
+Constructs a `TypedRecord` with the type of seq inferred from the input.
 
     TypedRecord{T}(id::AbstractString, seq::Any, qual::Any = NO_QUALITY) where T
 
-Constructs a `TypedRecord` with new sequence type to type `T`. Uses the T(::t) method for converting, if it exists.
+Constructs a `TypedRecord{T}` from a sequence that isn't type T. Tries to use the T(::typeof(seq)) method for converting.
     
-    TypedRecord{T}(record::TypedRecord{t}) where {T, t}
+    TypedRecord{T}(record::TypedRecord) where T
 
-Converts an existing `TypedRecord` to a new `TypedRecord` with sequence type `T`.
+Converts an existing `TypedRecord` to a new `TypedRecord` with sequence type `T`. Tries to use the T(::typeof(seq)) method for converting.
 
 A type to represent a generic biological sequence record. 
 
@@ -30,6 +30,7 @@ struct TypedRecord{T, Q <: AbstractQuality}
     sequence::T
     quality::Q
 
+    # When both record type and sequence type are specified
     function TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
         if qual isa NoQuality
             new{T, NoQuality}(id, seq, qual)
@@ -41,15 +42,17 @@ struct TypedRecord{T, Q <: AbstractQuality}
         end
     end
 
+    # When record type isn't specified
     function TypedRecord(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
         TypedRecord{T}(id, seq, qual)
     end
 
+    # When sequence type isn't specified
     function TypedRecord{T}(id::AbstractString, seq::Any, qual::Any = NO_QUALITY) where T
         TypedRecord{T}(id, T(seq), qual)
     end
 
-    function TypedRecord{T}(record::TypedRecord{t}) where {T, t}
+    function TypedRecord{T}(record::TypedRecord) where T
         TypedRecord{T}(record.identifier, record.sequence, record.quality)
     end
 end
