@@ -1,4 +1,4 @@
-# TypedFASTX
+# <img src="./docs/sticker.svg" width="30%" align="right" /> TypedFASTX
 
 [![Latest Release](https://img.shields.io/github/release/anton083/TypedFASTX.jl.svg)](https://github.com/anton083/TypedFASTX.jl/releases/latest)
 [![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/license/MIT)
@@ -11,7 +11,7 @@ TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using ty
 TypedFASTX.jl aims to enhance readability and reduce potential errors when dealing with different types of biological sequences. It also enforces type safety and allows you to define different methods for specific record types.
 
 ## Performance
-TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl)'s LongSequence type stores sequence information more efficiently. It may however be slightly slower compared to let's say, storing each field in its own vector, due to the overhead required to keep it flexible and user-friendly. The optional quality field is also something that might affect performance; the current implementation can't force the quality field of records in an array to be consistent (as they can be either `Nothing` or `Vector{Int8}`).
+TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl)'s LongSequence type stores sequence information more efficiently. It may however be slightly slower compared to let's say, storing each field in its own vector, due to the overhead required to keep it flexible and user-friendly.
 
 ## Install
 
