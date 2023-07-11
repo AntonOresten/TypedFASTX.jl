@@ -22,6 +22,7 @@ module TypedFASTX
         identifier,
         sequence,
         quality,
+        has_quality,
         quality_values
 
 
