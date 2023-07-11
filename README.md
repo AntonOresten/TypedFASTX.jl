@@ -13,7 +13,7 @@ TypedFASTX.jl aims to enhance readability and reduce potential errors when deali
 ## Performance
 TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl)'s LongSequence type stores sequence information more efficiently. It may however be slightly slower compared to let's say, storing each field in its own vector, due to the overhead required to keep it flexible and user-friendly.
 
-## Install
+## Installation
 
 To install the package, you can use the Julia package manager. From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
 
@@ -34,7 +34,7 @@ record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
 record1 == record2 == record3 # true
 ```
 
-Please refer to the documentation for more detailed information on how to use the TypedFASTX.jl package.
+Please refer to the documentation for more detailed information on how to use the package.
 
 ## Contributing
 Contributions are very welcome! If you'd like to contribute, GPT-4 suggests forking the repository and using a feature branch.
