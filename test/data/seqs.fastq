@@ -1,0 +1,16 @@
+@Seq1
+ACGTACGT
++
+!!!!!!!!
+@Seq2
+ACGT
++
+~~~~
+@Seq3
+ACGTACGTACGT
++
+!!!!!!!!!!!!
+@Seq4
+ACGTACGTACGTACGT
++
+~~~~~~~~~~~~~~~~
