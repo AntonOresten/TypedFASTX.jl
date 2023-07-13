@@ -12,7 +12,7 @@ module TypedFASTX
         # qualityscores.jl
         QualityScores,
 
-        # typedrecord.jl
+        # record.jl
         TypedRecord,
         StringRecord,
         DNARecord,
@@ -23,8 +23,12 @@ module TypedFASTX
         sequence,
         quality,
         has_quality,
-        quality_values
+        quality_values,
 
+        # reader.jl
+        TypedReader,
+        has_index,
+        seekrecord
 
     using FASTX
     using BioSequences
@@ -32,5 +36,6 @@ module TypedFASTX
     include("quality/quality.jl")
     include("record.jl")
     include("fastx-conversion.jl")
+    include("reader.jl")
 
 end

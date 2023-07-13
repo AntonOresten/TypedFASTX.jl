@@ -34,8 +34,11 @@
     rec6 = DNARecord("", "ACGT", QualityScores(";;;;", :solexa))
     @test all(>(0.75), error_prob_generator(rec6))
 
+    @test sprint(show, rec1) == "DNARecord(Rick, ACGT, !!!!)"
+
     io = IOBuffer()
-    @test isnothing(show(io, rec1))
-    @test String(take!(io)) == "DNARecord:\n Identifier: Rick\n   Sequence: ACGT\n    Quality: !!!!"
+    Base.invokelatest(show, io, MIME("text/plain"), rec1)
+    str = String(take!(io))
+    @test str == "DNARecord:\n Identifier: Rick\n   Sequence: ACGT\n    Quality: !!!!"
 
 end
