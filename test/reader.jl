@@ -10,6 +10,7 @@ fastq_file = "data/seqs.fastq"
         @test tr.encoding == FASTQ.SANGER_QUAL_ENCODING
         @test tr isa TypedReader{LongDNA{4}, NoQuality, FASTA.Reader}
         @test eltype(tr) <: TypedRecord{LongDNA{4}, NoQuality}
+        @test eltype(typeof(tr)) == eltype(tr)
 
         @test has_index(tr)
         @test length(tr) == length(tr.reader.index.lengths)

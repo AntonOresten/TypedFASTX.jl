@@ -34,7 +34,7 @@ end
 
 Base.close(tr::TypedReader) = close(tr.reader)
 Base.eltype(::TypedReader{T, Q}) where {T, Q} = TypedRecord{T, Q}
-Base.eltype(::Type{TypedReader{T, Q}}) where {T, Q} = TypedRecord{T, Q}
+Base.eltype(::Type{<:TypedReader{T, Q}}) where {T, Q} = TypedRecord{T, Q}
 
 has_index(tr::TypedReader{T, NoQuality, FASTA.Reader}) where T = !isnothing(tr.reader.index)
 Base.length(tr::TypedReader{T, NoQuality, FASTA.Reader}) where T = has_index(tr) ? length(tr.reader.index.lengths) : error("Length cannot be determined without an index.")
