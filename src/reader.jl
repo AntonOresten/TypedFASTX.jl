@@ -33,6 +33,7 @@ mutable struct TypedReader{T, Q <: AbstractQuality, R <: FASTXReaders}
 end
 
 Base.close(tr::TypedReader) = close(tr.reader)
+Base.eltype(::TypedReader{T, Q}) where {T, Q} = TypedRecord{T, Q}
 Base.eltype(::Type{TypedReader{T, Q}}) where {T, Q} = TypedRecord{T, Q}
 
 has_index(tr::TypedReader{T, NoQuality, FASTA.Reader}) where T = !isnothing(tr.reader.index)
@@ -64,7 +65,7 @@ function Base.getindex(tr::TypedReader{T, NoQuality, FASTA.Reader}, inds::Array{
 end
 
 function Base.getindex(tr::TypedReader{T, NoQuality, FASTA.Reader}, r::UnitRange{<:Integer}) where T
-    (r.start < 1 || r.stop > length(tr)) && error("Indices outside of range $(1:length(lazy))")
+    (r.start < 1 || r.stop > length(tr)) && error("Indices outside of range $(1:length(tr))")
     seekrecord(tr, r.start)
     [TypedRecord{T}(record) for (i, record) in zip(r, tr.reader)]
 end

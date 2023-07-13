@@ -9,6 +9,7 @@ fastq_file = "data/seqs.fastq"
         @test tr.reader isa FASTA.Reader
         @test tr.encoding == FASTQ.SANGER_QUAL_ENCODING
         @test tr isa TypedReader{LongDNA{4}, NoQuality, FASTA.Reader}
+        @test eltype(tr) <: TypedRecord{LongDNA{4}, NoQuality}
 
         @test has_index(tr)
         @test length(tr) == length(tr.reader.index.lengths)
@@ -20,7 +21,12 @@ fastq_file = "data/seqs.fastq"
         @test last_index == length(tr)
 
         rec1 = first(tr)
+        @test rec1 == tr["Seq1"]
         @test rec1 == tr[1]
+        @test tr[[1,2]] == [tr[1], tr[2]]
+        @test tr[1:2] == [tr[1], tr[2]]
+        @test_throws ErrorException tr[0:5]
+
         @test rec1 in tr
         @test !(AARecord("AASeq", "SMITH") in tr)
 
