@@ -5,6 +5,7 @@
     @test rec1 == DNARecord("Rick", dna"ACGT", "!!!!")
     @test rec1 == TypedRecord("Rick", dna"ACGT", "!!!!")
     @test rec1 == DNARecord("Rick", rna"ACGU", "!!!!")
+    @test rec1 == DNARecord(RNARecord("Rick", rna"ACGU", "!!!!"))
     @test rec1 == DNARecord(rec1)
 
     @test length(rec1) == 4

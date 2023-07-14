@@ -1,23 +1,20 @@
 # Methods for converting between TypedRecord and FASTX records
 
-# FASTA
 
-function TypedRecord{T}(fasta_record::FASTARecord) where T
+function TypedRecord{T, NoQuality}(fasta_record::FASTARecord) where T
     id = identifier(fasta_record)
     seq = sequence(T, fasta_record)
     TypedRecord{T}(id, seq)
 end
 
-function TypedRecord{T, NoQuality}(fasta_record::FASTARecord) where T
-    TypedRecord{T}(fasta_record)
+function TypedRecord{T, QualityScores}(::FASTARecord) where T
+    error("Can't convert a `FASTX.FASTA.Record` to a `$(TypedRecord{T})` with quality.")
 end
 
-function FASTA.Record(record::TypedRecord)
-    # Ignore the "Possible method call error." -- everything is fine.
-    FASTA.Record(identifier(record), sequence(record))
+function TypedRecord{T}(fasta_record::FASTARecord) where T
+    TypedRecord{T, NoQuality}(fasta_record)
 end
 
-# FASTQ
 
 function TypedRecord{T, NoQuality}(fastq_record::FASTQRecord) where T
     id = identifier(fastq_record)
@@ -37,8 +34,15 @@ function TypedRecord{T}(fastq_record::FASTQRecord) where T
     TypedRecord{T, QualityScores}(fastq_record)
 end
 
+
+function FASTA.Record(record::TypedRecord{T}) where T
+    # Ignore the "Possible method call error." -- everything is fine.
+    FASTA.Record(identifier(record), sequence(record))
+end
+
+
 function FASTQ.Record(::TypedRecord{T, NoQuality}) where T
-    error("Can't convert a `TypedRecord` with no quality to a `FASTX.FASTQ.Record`.")
+    error("Can't convert a `$(TypedRecord{T})` with no quality to a `FASTX.FASTQ.Record`.")
 end
 
 function FASTQ.Record(record::TypedRecord{T, QualityScores}) where T
