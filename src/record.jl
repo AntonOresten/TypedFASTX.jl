@@ -95,24 +95,31 @@ function Base.summary(::TypedRecord{T}) where T
     "$(TypedRecord{T})"
 end
 
-import Base: show, display
+function Base.print(io::IO, record::TypedRecord{T, NoQuality}) where T
+    print(io, ">$(identifier(record))\n$(sequence(record))")
+end
+
+function Base.print(io::IO, record::TypedRecord{T, QualityScores}) where T
+    print(io, "@$(identifier(record))\n$(sequence(record))\n+\n$(quality(record))")
+end
 
 function Base.show(io::IO, record::TypedRecord)
-    print(io, "$(summary(record))")
-    print(io, "(")
-    print(io, "$(identifier(record))")
-    print(io, ", $(sequence(record))")
+    print(io,
+        summary(record), '(',
+        repr(identifier(record)),
+        ", \"", FASTX.truncate(String(sequence(record)), 20), '"',
+    )
     if has_quality(record)
-        print(io, ", $(quality(record))")
+        print(io, ", \"", FASTX.truncate(String(quality(record)), 20), '"')
     end
     print(io, ")")
 end
 
 function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord)
     print(io, "$(summary(record)):")
-    print(io, "\n Identifier: $(identifier(record))")
-    print(io, "\n   Sequence: ", sequence(record))
+    print(io, "\n identifier: \"", identifier(record), '"')
+    print(io, "\n   sequence: \"", FASTX.truncate(String(sequence(record)), 40), '"')
     if has_quality(record)
-    print(io, "\n    Quality: ", quality(record))
+    print(io, "\n    quality: \"", FASTX.truncate(String(quality(record)), 40), '"')
     end
 end
