@@ -22,16 +22,17 @@ add TypedFASTX
 ```
 
 ## Example
-Here is a basic example of how you can create DNA records (without qualities):
+Here is some ways to create DNA records (without qualities):
 
 ```julia
 using TypedFASTX, BioSequences, FASTX
 
 record1 = DNARecord("Ricky", "ACGTA")
-record2 = TypedRecord("Ricky", dna"ACGTA")
-record3 = DNARecord(FASTARecord("Ricky", "ACGTA"))
+record2 = DNARecord(FASTARecord("Ricky", "ACGTA"))
+record3 = TypedRecord("Ricky", dna"ACGTA")
+record4 = TypedRecord{LongDNA{4}}("Ricky", "ACGTA")
 
-record1 == record2 == record3 # true
+record1 == record2 == record3 == record4 # true
 ```
 
 Please refer to the documentation for more detailed information on how to use the package.

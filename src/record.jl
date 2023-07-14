@@ -91,11 +91,24 @@ Creates a vector of error probabilities for each character in the sequence.
 """
 error_probs(record::TypedRecord) = has_quality(record) ? error_probs(record.quality) : nothing
 
-function Base.summary(record::TypedRecord)
-    "$(TypedRecord{first(typeof(record).parameters)})"
+function Base.summary(::TypedRecord{T}) where T
+    "$(TypedRecord{T})"
 end
 
+import Base: show, display
+
 function Base.show(io::IO, record::TypedRecord)
+    print(io, "$(summary(record))")
+    print(io, "(")
+    print(io, "$(identifier(record))")
+    print(io, ", $(sequence(record))")
+    if has_quality(record)
+        print(io, ", $(quality(record))")
+    end
+    print(io, ")")
+end
+
+function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord)
     print(io, "$(summary(record)):")
     print(io, "\n Identifier: $(identifier(record))")
     print(io, "\n   Sequence: ", sequence(record))
