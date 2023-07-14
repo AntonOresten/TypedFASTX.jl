@@ -12,7 +12,7 @@ mutable struct TypedReader{T, Q <: AbstractQuality, R <: FASTXReaders}
     # encoding is unused to increase type stability
     function TypedReader{T, NoQuality}(path::String, attach_index::Bool=false) where T
         io = open(path)
-        reader = FASTA.Reader(open(path))
+        reader = FASTA.Reader(open(path), copy=false)
         if attach_index
             index = faidx(io)
             FASTA.index!(reader, index)
@@ -25,7 +25,7 @@ mutable struct TypedReader{T, Q <: AbstractQuality, R <: FASTXReaders}
 
     # For FASTQ files
     function TypedReader{T, QualityScores}(path::String, encoding::QualityEncoding = SANGER) where T
-        reader = FASTQ.Reader(open(path))
+        reader = FASTQ.Reader(open(path), copy=false)
         tr = new{T, QualityScores, FASTQ.Reader}(path, reader, 1, encoding)
         finalizer(close, tr)
         tr
