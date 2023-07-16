@@ -22,7 +22,7 @@ add TypedFASTX
 ```
 
 ## Example
-Here is some ways to create DNA records (without qualities):
+Here are some ways to create DNA records (without qualities):
 
 ```julia
 using TypedFASTX, BioSequences, FASTX
