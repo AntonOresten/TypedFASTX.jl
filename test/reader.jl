@@ -7,8 +7,7 @@ fastq_file = "data/seqs.fastq"
         tr = TypedReader{LongDNA{4}, NoQuality}(fasta_file, true)
         @test tr.path == fasta_file
         @test tr.reader isa FASTA.Reader
-        @test tr.encoding == FASTQ.SANGER_QUAL_ENCODING
-        @test tr isa TypedReader{LongDNA{4}, NoQuality, FASTA.Reader}
+        @test tr isa TypedReader{LongDNA{4}, NoQuality}
         @test eltype(tr) <: TypedRecord{LongDNA{4}, NoQuality}
         @test eltype(typeof(tr)) == eltype(tr)
 

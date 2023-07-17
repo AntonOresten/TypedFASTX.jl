@@ -28,7 +28,8 @@ module TypedFASTX
         # reader.jl
         TypedReader,
         has_index,
-        seekrecord
+        seekrecord,
+        take
 
     using FASTX
     using BioSequences
