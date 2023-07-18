@@ -28,14 +28,19 @@ module TypedFASTX
         # reader.jl
         TypedReader,
         has_index,
-        seekrecord
+        seekrecord,
+        index!,
+        StringReader,
+        DNAReader,
+        RNAReader,
+        AAReader
 
     using FASTX
     using BioSequences
 
     include("quality/quality.jl")
     include("record.jl")
-    include("fastx-conversion.jl")
+    include("conversion.jl")
     include("reader.jl")
 
 end

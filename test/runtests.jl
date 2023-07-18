@@ -1,5 +1,6 @@
 using TypedFASTX
 using Test
+using Logging
 
 using FASTX, BioSequences
 
@@ -10,6 +11,6 @@ using FASTX, BioSequences
     end
 
     include("record.jl")
-    include("fastx-conversion.jl")
+    include("conversion.jl")
     include("reader.jl")
 end

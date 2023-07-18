@@ -32,6 +32,16 @@ Base.:(==)(qs1::QualityScores, qs2::QualityScores) = hash(qs1) == hash(qs2)
 encode_quality(qs::QualityScores) = qs.values .+ qs.encoding.offset
 Base.String(qs::QualityScores) = String(UInt8.(encode_quality(qs)))
 
+function Base.summary(io::IO, ::QualityScores)
+    print(io, "$(QualityScores)")
+end
+
 function Base.show(io::IO, qs::QualityScores)
     print(io, String(qs))
+end
+
+function Base.show(io::IO, ::MIME"text/plain", qs::QualityScores)
+    print(io, "$(summary(qs)):")
+    print(io, "\n  encoding: ", qs.encoding)
+    print(io, "\n    values: ", FASTX.truncate(string(qs.values), 40))
 end
