@@ -29,7 +29,11 @@ module TypedFASTX
         TypedReader,
         has_index,
         seekrecord,
-        take
+        index!,
+        StringReader,
+        DNAReader,
+        RNAReader,
+        AAReader
 
     using FASTX
     using BioSequences

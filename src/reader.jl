@@ -32,6 +32,11 @@ mutable struct TypedReader{T, Q <: AbstractQuality}
     end
 end
 
+const StringReader = TypedReader{String}
+const DNAReader = TypedReader{LongDNA{4}}
+const RNAReader = TypedReader{LongRNA{4}}
+const AAReader = TypedReader{LongAA}
+
 function Base.show(io::IO, tr::TypedReader{T, Q}) where {T, Q}
     print(io, "$(TypedReader{T, Q})")
     print(io, "\n  path: ", repr(tr.path))
@@ -105,6 +110,14 @@ function Base.iterate(tr::TypedReader{T, NoQuality}, state) where T
     (typed_record, new_state)
 end
 
+function Base.collect(tr::TypedReader{T}) where T
+    collect(TypedRecord{T}, tr.reader)
+end
+
+function Base.collect(tr::TypedReader{T, QualityScores}) where T
+    take!(tr)
+end
+
 # QualityScores
 
 # Define Base.getindex(reader::TypedRecord{T, QualityScores}...) using ReadDatastores?
@@ -114,7 +127,7 @@ function Base.iterate(tr::TypedReader{T, QualityScores}) where T
     record_state = iterate(tr.reader)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    typed_record = TypedRecord{T}(record)
+    typed_record = TypedRecord{T, QualityScores}(record, tr.encoding)
     (typed_record, new_state)
 end
 
@@ -123,7 +136,7 @@ function Base.iterate(tr::TypedReader{T, QualityScores}, state) where T
     record_state = iterate(tr.reader, state)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    typed_record = TypedRecord{T}(record)
+    typed_record = TypedRecord{T, QualityScores}(record, tr.encoding)
     (typed_record, new_state)
 end
 
@@ -139,7 +152,7 @@ function Base.in(record::TypedRecord, tr::TypedReader{T, NoQuality}) where T
 end
 
 # take n records from a TypedReader
-function take(reader::TypedReader, n::Integer)
+function Base.take!(reader::TypedReader, n::Real = Inf)
     records = Vector{eltype(reader)}()
     if n < 1
         return records
@@ -152,10 +165,22 @@ function take(reader::TypedReader, n::Integer)
             break
         end
     end
-    if i < n
+    if i < n && !isinf(n)
         @warn "Reached end of file before taking $n records. $(length(records)) records taken from \"$(reader.path)\"."
     end
     records
+end
+
+import FASTX: index!
+
+function index!(tr::TypedReader{T, NoQuality}) where T
+    if !has_index(tr)
+        open(tr.path) do io
+            index = faidx(io)
+            FASTA.index!(tr.reader, index)
+        end
+    end
+    return tr
 end
 
 # Need different methods depending on Q because if Q isn't NoQuality, encoding_name argument is needed

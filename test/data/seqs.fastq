@@ -1,7 +1,7 @@
 @Seq1
 ACGTACGT
 +
-!!!!!!!!
+@@@@@@@@
 @Seq2
 ACGT
 +
@@ -9,7 +9,7 @@ ACGT
 @Seq3
 ACGTACGTACGT
 +
-!!!!!!!!!!!!
+;;;;;;;;;;;;
 @Seq4
 ACGTACGTACGTACGT
 +

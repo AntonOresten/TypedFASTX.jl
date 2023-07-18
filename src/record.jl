@@ -115,11 +115,15 @@ function Base.show(io::IO, record::TypedRecord)
     print(io, ")")
 end
 
-function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord)
+function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord{T, NoQuality}) where T
     print(io, "$(summary(record)):")
     print(io, "\n identifier: \"", identifier(record), '"')
     print(io, "\n   sequence: \"", FASTX.truncate(String(sequence(record)), 40), '"')
-    if has_quality(record)
+end
+
+function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord{T, QualityScores}) where T
+    print(io, "$(summary(record)):")
+    print(io, "\n identifier: \"", identifier(record), '"')
+    print(io, "\n   sequence: \"", FASTX.truncate(String(sequence(record)), 40), '"')
     print(io, "\n    quality: \"", FASTX.truncate(String(quality(record)), 40), '"')
-    end
 end

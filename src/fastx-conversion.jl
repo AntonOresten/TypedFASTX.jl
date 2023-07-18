@@ -1,5 +1,5 @@
 # Methods for converting between TypedRecord and FASTX records
-
+const FASTXRecord = Union{FASTARecord, FASTQRecord}
 
 function TypedRecord{T, NoQuality}(fasta_record::FASTARecord) where T
     id = identifier(fasta_record)
@@ -22,7 +22,14 @@ function TypedRecord{T, NoQuality}(fastq_record::FASTQRecord) where T
     TypedRecord{T}(id, seq)
 end
 
-function TypedRecord{T, QualityScores}(fastq_record::FASTQRecord, encoding_name::Symbol = :sanger) where T
+function TypedRecord{T, QualityScores}(fastq_record::FASTQRecord, encoding::QualityEncoding = FASTQ.SANGER_QUAL_ENCODING) where T
+    id = identifier(fastq_record)
+    seq = sequence(T, fastq_record)
+    qual = collect(quality_scores(fastq_record, encoding))
+    TypedRecord{T}(id, seq, qual)
+end
+
+function TypedRecord{T, QualityScores}(fastq_record::FASTQRecord, encoding_name::Symbol) where T
     encoding = encoding_name_to_quality_encoding(encoding_name)
     id = identifier(fastq_record)
     seq = sequence(T, fastq_record)
@@ -32,6 +39,14 @@ end
 
 function TypedRecord{T}(fastq_record::FASTQRecord) where T
     TypedRecord{T, QualityScores}(fastq_record)
+end
+
+function Base.convert(::Type{TypedRecord{T}}, record::FASTARecord) where T
+    TypedRecord{T, NoQuality}(record)
+end
+
+function Base.convert(::Type{TypedRecord{T}}, record::FASTQRecord) where T
+    TypedRecord{T, QualityScores}(record)
 end
 
 
@@ -49,3 +64,10 @@ function FASTQ.Record(record::TypedRecord{T, QualityScores}) where T
     FASTQ.Record(identifier(record), sequence(record), quality_values(record), offset=record.quality.encoding.offset)
 end
 
+function Base.convert(::Type{FASTXRecord}, record::TypedRecord)
+    if record.quality isa NoQuality
+        FASTA.Record(record)
+    else
+        FASTQ.Record(record)
+    end
+end
