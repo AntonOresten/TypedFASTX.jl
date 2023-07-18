@@ -35,6 +35,18 @@
     rec6 = DNARecord("", "ACGT", QualityScores(";;;;", :solexa))
     @test all(>(0.75), error_prob_generator(rec6))
 
+    rec7 = DNARecord("Rick", "ACGT")
+    io = IOBuffer()
+    Base.print(io, rec7)
+    output = String(take!(io))
+    @test output == ">Rick\nACGT"
+
+    rec8 = DNARecord("Rick", "ACGT", "!!!!")
+    io = IOBuffer()
+    Base.print(io, rec8)
+    output = String(take!(io))
+    @test output == "@Rick\nACGT\n+\n!!!!"
+
     @test sprint(show, rec1) == "DNARecord(\"Rick\", \"ACGT\", \"!!!!\")"
 
     io = IOBuffer()

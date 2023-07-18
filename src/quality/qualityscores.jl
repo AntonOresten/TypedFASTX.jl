@@ -42,6 +42,6 @@ end
 
 function Base.show(io::IO, ::MIME"text/plain", qs::QualityScores)
     print(io, "$(summary(qs)):")
-    print(io, "\n     values: ", FASTX.truncate(string(qs.values), 40), ']')
-    print(io, "\n   encoding: ", qs.encoding)
+    print(io, "\n  encoding: ", qs.encoding)
+    print(io, "\n    values: ", FASTX.truncate(string(qs.values), 40))
 end

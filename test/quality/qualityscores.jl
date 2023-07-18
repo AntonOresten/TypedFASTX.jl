@@ -15,4 +15,11 @@
     @test isnothing(show(io, qs2))
     @test String(take!(io)) == "@@@@"
 
+    @test summary(qs1) == "QualityScores"
+
+    io = IOBuffer()
+    Base.invokelatest(show, io, MIME("text/plain"), qs1)
+    str = String(take!(io))
+    @test str == "QualityScores:\n  encoding: QualityEncoding(33, 126, 33)\n    values: Int8[0, 0, 0, 0]"
+
 end

@@ -40,7 +40,7 @@ module TypedFASTX
 
     include("quality/quality.jl")
     include("record.jl")
-    include("fastx-conversion.jl")
+    include("conversion.jl")
     include("reader.jl")
 
 end

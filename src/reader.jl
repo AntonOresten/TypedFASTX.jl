@@ -37,8 +37,16 @@ const DNAReader = TypedReader{LongDNA{4}}
 const RNAReader = TypedReader{LongRNA{4}}
 const AAReader = TypedReader{LongAA}
 
+function Base.summary(::TypedReader{T, Q}) where {T, Q}
+    "$(TypedReader{T, Q})"
+end
+
 function Base.show(io::IO, tr::TypedReader{T, Q}) where {T, Q}
-    print(io, "$(TypedReader{T, Q})")
+    print(io, "$(summary(tr))($(repr(tr.path)), $(tr.position))")
+end
+
+function Base.show(io::IO, ::MIME"text/plain", tr::TypedReader{T, Q}) where {T, Q}
+    print(io, summary(tr))
     print(io, "\n  path: ", repr(tr.path))
     print(io, "\n  position: ", tr.position)
 end
@@ -110,12 +118,8 @@ function Base.iterate(tr::TypedReader{T, NoQuality}, state) where T
     (typed_record, new_state)
 end
 
-function Base.collect(tr::TypedReader{T}) where T
-    collect(TypedRecord{T}, tr.reader)
-end
-
-function Base.collect(tr::TypedReader{T, QualityScores}) where T
-    take!(tr)
+function Base.collect(tr::TypedReader{T, Q}) where {T, Q}
+    collect(TypedRecord{T, Q}, tr.reader)
 end
 
 # QualityScores
@@ -149,6 +153,10 @@ function Base.in(record::TypedRecord, tr::TypedReader{T, NoQuality}) where T
         error("Can't check if $record is in TypedReader because it does not have an index.")
     end
     haskey(tr.reader.index.names, identifier(record))
+end
+
+function Base.in(record::TypedRecord, tr::TypedReader{T, QualityScores}) where T
+    error("Can't check if $record is in TypedReader because it wraps a FASTQ reader.")
 end
 
 # take n records from a TypedReader

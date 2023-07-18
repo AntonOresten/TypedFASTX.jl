@@ -1,5 +1,8 @@
 # Methods for converting between TypedRecord and FASTX records
-const FASTXRecord = Union{FASTARecord, FASTQRecord}
+
+function TypedRecord{T, NoQuality}(record::TypedRecord) where T
+    TypedRecord{T}(identifier(record), sequence(record))
+end
 
 function TypedRecord{T, NoQuality}(fasta_record::FASTARecord) where T
     id = identifier(fasta_record)
@@ -41,33 +44,40 @@ function TypedRecord{T}(fastq_record::FASTQRecord) where T
     TypedRecord{T, QualityScores}(fastq_record)
 end
 
-function Base.convert(::Type{TypedRecord{T}}, record::FASTARecord) where T
-    TypedRecord{T, NoQuality}(record)
+
+function Base.convert(T::Type{<:TypedRecord}, record::FASTARecord)
+    T(record)
 end
 
-function Base.convert(::Type{TypedRecord{T}}, record::FASTQRecord) where T
-    TypedRecord{T, QualityScores}(record)
-end
-
-
-function FASTA.Record(record::TypedRecord{T}) where T
-    # Ignore the "Possible method call error." -- everything is fine.
-    FASTA.Record(identifier(record), sequence(record))
+function Base.convert(T::Type{<:TypedRecord}, record::FASTQRecord)
+    T(record)
 end
 
 
-function FASTQ.Record(::TypedRecord{T, NoQuality}) where T
+function FASTX.FASTA.Record(record::TypedRecord{T}) where T
+    FASTX.FASTA.Record(identifier(record), sequence(record))
+end
+
+function FASTX.FASTA.Record(record::TypedRecord{T, NoQuality}) where T
+    FASTX.FASTA.Record(identifier(record), sequence(record))
+end
+
+function FASTX.FASTA.Record(record::TypedRecord{T, QualityScores}) where T
+    FASTX.FASTA.Record(identifier(record), sequence(record))
+end
+
+function FASTX.FASTX.FASTQ.Record(::TypedRecord{T, NoQuality}) where T
     error("Can't convert a `$(TypedRecord{T})` with no quality to a `FASTX.FASTQ.Record`.")
 end
 
-function FASTQ.Record(record::TypedRecord{T, QualityScores}) where T
-    FASTQ.Record(identifier(record), sequence(record), quality_values(record), offset=record.quality.encoding.offset)
+function FASTX.FASTQ.Record(record::TypedRecord{T, QualityScores}) where T
+    FASTX.FASTQ.Record(identifier(record), sequence(record), quality_values(record), offset=record.quality.encoding.offset)
 end
 
-function Base.convert(::Type{FASTXRecord}, record::TypedRecord)
-    if record.quality isa NoQuality
-        FASTA.Record(record)
-    else
-        FASTQ.Record(record)
-    end
+function Base.convert(::Type{FASTARecord}, record::TypedRecord)
+    FASTARecord(record)
+end
+
+function Base.convert(::Type{FASTQRecord}, record::TypedRecord)
+    FASTQRecord(record)
 end
