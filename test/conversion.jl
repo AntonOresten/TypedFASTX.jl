@@ -1,5 +1,7 @@
 @testset "conversion.jl" begin
 
+    @test AARecord{NoQuality}(AARecord("Mickey", "SMITH", "!!!!!")) == AARecord("Mickey", "SMITH")
+
     fa_record = FASTARecord("Mickey", "SMITH")
     fq_record = FASTQRecord("Ricky", "TTTAA", "Smith")
 

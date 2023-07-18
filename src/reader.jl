@@ -188,7 +188,7 @@ function index!(tr::TypedReader{T, NoQuality}) where T
             FASTA.index!(tr.reader, index)
         end
     end
-    return tr
+    tr
 end
 
 # Need different methods depending on Q because if Q isn't NoQuality, encoding_name argument is needed

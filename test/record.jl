@@ -50,7 +50,12 @@
     @test sprint(show, rec1) == "DNARecord(\"Rick\", \"ACGT\", \"!!!!\")"
 
     io = IOBuffer()
-    Base.invokelatest(show, io, MIME("text/plain"), rec1)
+    Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Rick", "ACGT"))
+    str = String(take!(io))
+    @test str == "DNARecord:\n identifier: \"Rick\"\n   sequence: \"ACGT\""
+
+    io = IOBuffer()
+    Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Rick", "ACGT", "!!!!"))
     str = String(take!(io))
     @test str == "DNARecord:\n identifier: \"Rick\"\n   sequence: \"ACGT\"\n    quality: \"!!!!\""
 

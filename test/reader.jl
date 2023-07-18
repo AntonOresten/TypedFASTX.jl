@@ -32,6 +32,7 @@ fastq_file = "data/seqs.fastq"
         last_index = lastindex(tr)
         @test first_index == 1
         @test last_index == length(tr)
+        @test eachindex(tr) == firstindex(tr):lastindex(tr)
 
         rec1 = first(tr)
         @test rec1 == tr["Seq1"]
@@ -69,6 +70,9 @@ fastq_file = "data/seqs.fastq"
         recs = collect(tr)
         @test length(recs) == 4
         @test eltype(recs) == eltype(tr)
+
+        @test index!(tr) == tr
+        @test seekrecord(tr, 1) == 1
     end
 
     @testset "FASTQ" begin
@@ -85,6 +89,8 @@ fastq_file = "data/seqs.fastq"
         @test_throws ErrorException first_record in tr # even though it's in the file, 
 
         @test length(collect(tr)) == 3
+        tr = TypedReader{LongDNA{4}, QualityScores}(fastq_file)
+        @test length(take!(tr)) == 4
     end
 
 end

@@ -58,13 +58,6 @@ function FASTX.FASTA.Record(record::TypedRecord{T}) where T
     FASTX.FASTA.Record(identifier(record), sequence(record))
 end
 
-function FASTX.FASTA.Record(record::TypedRecord{T, NoQuality}) where T
-    FASTX.FASTA.Record(identifier(record), sequence(record))
-end
-
-function FASTX.FASTA.Record(record::TypedRecord{T, QualityScores}) where T
-    FASTX.FASTA.Record(identifier(record), sequence(record))
-end
 
 function FASTX.FASTX.FASTQ.Record(::TypedRecord{T, NoQuality}) where T
     error("Can't convert a `$(TypedRecord{T})` with no quality to a `FASTX.FASTQ.Record`.")
