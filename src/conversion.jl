@@ -1,9 +1,5 @@
 # Methods for converting between TypedRecord and FASTX records
 
-function TypedRecord{T, NoQuality}(record::TypedRecord) where T
-    TypedRecord{T}(identifier(record), sequence(record))
-end
-
 function TypedRecord{T, NoQuality}(fasta_record::FASTARecord) where T
     id = identifier(fasta_record)
     seq = sequence(T, fasta_record)

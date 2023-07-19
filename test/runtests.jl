@@ -13,4 +13,5 @@ using FASTX, BioSequences
     include("record.jl")
     include("conversion.jl")
     include("reader.jl")
+    include("writer.jl")
 end
