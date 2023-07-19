@@ -23,8 +23,8 @@
         @test rec1 == DNARecord("Ricky", "ACGT", "!!!!")
         @test rec1 == TypedRecord("Ricky", dna"ACGT", "!!!!")
 
-        @test rec2 == DNARecord{QualityScores}(dna"ACGT", QualityScores("!!!!"))
-        @test rec2 == DNARecord{QualityScores}(dna"ACGT", "!!!!")
+        @test rec2 == DNARecord{QualityScores}("ACGT", QualityScores("!!!!"))
+        @test rec2 == DNARecord{QualityScores}("ACGT", "!!!!")
         @test rec2 == DNARecord(dna"ACGT", "!!!!")
         @test rec2 == TypedRecord(dna"ACGT", QualityScores("!!!!"))
         @test rec2 == TypedRecord(dna"ACGT", "!!!!")
