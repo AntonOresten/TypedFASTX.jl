@@ -1,5 +1,4 @@
 const EMPTY_ID = ""
-#struct EMPTY_ID <: AbstractString end
 
 """
     TypedRecord{T}
@@ -10,22 +9,6 @@ A type to represent a generic biological sequence record.
 - `identifier::String`: The unique identifier for the sequence.
 - `sequence::T`: The sequence itself. It can be of any type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
 - `quality::Union{NoQuality, QualityScores}`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
-
-    TypedRecord{T}(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
-
-Constructs a `TypedRecord` with given id, seq, and optional qual.
-
-    TypedRecord(id::AbstractString, seq::T, qual::Any = NO_QUALITY) where T
-
-Constructs a `TypedRecord` with the type of seq inferred from the input.
-
-    TypedRecord{T}(id::AbstractString, seq::Any, qual::Any = NO_QUALITY) where T
-
-Constructs a `TypedRecord{T}` from a sequence that isn't type T. Tries to use the T(::typeof(seq)) method for converting.
-
-    TypedRecord{T}(record::TypedRecord) where T
-
-Converts an existing `TypedRecord` to a new `TypedRecord` with sequence type `T`.
 """
 struct TypedRecord{T, Q <: AbstractQuality}
     identifier::String
@@ -111,32 +94,33 @@ struct TypedRecord{T, Q <: AbstractQuality}
         TypedRecord{T, QualityScores}(EMPTY_ID, T(seq), qs)
     end
 
-    # DNARecord{NoQuality}(StringRecord("Ricky", "ACGT"))
+
+    # DNARecord{NoQuality}(RNARecord("Ricky", "ACGU"))
     function TypedRecord{T, NoQuality}(record::TypedRecord{<:Any, NoQuality}) where T
         TypedRecord{T, NoQuality}(record.identifier, record.sequence)
     end
     
-    # DNARecord{NoQuality}(StringRecord("Ricky", "ACGT", "!!!!"))
+    # DNARecord{NoQuality}(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T, NoQuality}(record::TypedRecord{<:Any, QualityScores}) where T
         TypedRecord{T, NoQuality}(record.identifier, record.sequence)
     end
+
+    # DNARecord(RNARecord("Ricky", "ACGU"))
+    function TypedRecord{T}(record::TypedRecord{<:Any, NoQuality}) where T
+        TypedRecord{T, NoQuality}(record.identifier, record.sequence)
+    end
     
-    # DNARecord{QualityScores}(StringRecord("Ricky", "ACGT", "!!!!"))
+    # DNARecord{QualityScores}(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T, QualityScores}(record::TypedRecord{<:Any, QualityScores}) where T
         TypedRecord{T, QualityScores}(record.identifier, record.sequence, record.quality)
     end
 
-    # DNARecord(StringRecord("Ricky", "ACGT"))
-    function TypedRecord{T}(record::TypedRecord{<:Any, NoQuality}) where T
-        TypedRecord{T}(record.identifier, record.sequence)
-    end
-
-    # DNARecord(StringRecord("Ricky", "ACGT", "!!!!"))
+    # DNARecord(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T}(record::TypedRecord{<:Any, QualityScores}) where T
-        TypedRecord{T}(record.identifier, record.sequence, record.quality)
+        TypedRecord{T, QualityScores}(record.identifier, record.sequence, record.quality)
     end
 
-    # TypedRecord(StringRecord("Ricky", "ACGT", "!!!!"))
+    # TypedRecord(DNARecord("Ricky", "ACGT", "!!!!"))
     function TypedRecord(record::TypedRecord{T, Q}) where {T, Q}
         new{T, Q}(record.identifier, record.sequence, record.quality)
     end
@@ -193,7 +177,7 @@ function Base.show(io::IO, record::TypedRecord{T, NoQuality}) where T
     print(io,
         summary(record), '(',
         repr(identifier(record)),
-        ", \"", FASTX.truncate(String(sequence(record)), 20), '"',
+        ", ", repr(FASTX.truncate(String(sequence(record)), 20)),
         ')'
     )
 end
