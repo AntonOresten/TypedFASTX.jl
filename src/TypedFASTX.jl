@@ -33,7 +33,10 @@ module TypedFASTX
         StringReader,
         DNAReader,
         RNAReader,
-        AAReader
+        AAReader,
+
+        # writer.jl
+        TypedWriter
 
     using FASTX
     using BioSequences
@@ -42,5 +45,6 @@ module TypedFASTX
     include("record.jl")
     include("conversion.jl")
     include("reader.jl")
+    include("writer.jl")
 
 end

@@ -1,9 +1,9 @@
-const FASTXReaders = Union{FASTA.Reader, FASTQ.Reader}
+const FASTXReader = Union{FASTA.Reader, FASTQ.Reader}
 const SANGER = FASTQ.SANGER_QUAL_ENCODING
 
 mutable struct TypedReader{T, Q <: AbstractQuality}
     path::String
-    reader::FASTXReaders
+    reader::FASTXReader
     position::Int
     encoding::QualityEncoding
 
