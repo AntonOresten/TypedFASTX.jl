@@ -8,7 +8,7 @@ A type to represent a generic biological sequence record.
 ### Fields
 - `identifier::String`: The unique identifier for the sequence.
 - `sequence::T`: The sequence itself. It can be of any type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
-- `quality::Union{NoQuality, QualityScores}`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
+- `quality::AbstractQuality`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
 """
 struct TypedRecord{T, Q <: AbstractQuality}
     identifier::String
@@ -25,6 +25,11 @@ struct TypedRecord{T, Q <: AbstractQuality}
         TypedRecord{T, NoQuality}(id, T(seq))
     end
 
+    # DNARecord("Ricky", dna"ACGT")
+    function TypedRecord{T}(id::AbstractString, seq::T) where T
+        TypedRecord{T, NoQuality}(id, seq)
+    end
+
     # DNARecord("Ricky", "ACGT")
     function TypedRecord{T}(id::AbstractString, seq::Any) where T
         TypedRecord{T, NoQuality}(id, T(seq))
@@ -33,21 +38,6 @@ struct TypedRecord{T, Q <: AbstractQuality}
     # TypedRecord("Ricky", dna"ACGT")
     function TypedRecord(id::AbstractString, seq::T) where T
         TypedRecord{T, NoQuality}(id, seq)
-    end
-
-    # DNARecord{NoQuality}("ACGT")
-    function TypedRecord{T, NoQuality}(seq::Any) where T
-        TypedRecord{T, NoQuality}(EMPTY_ID, T(seq))
-    end
-
-    # DNARecord("ACGT")
-    function TypedRecord{T}(seq::Any) where T
-        TypedRecord{T, NoQuality}(EMPTY_ID, T(seq))
-    end
-
-    # TypedRecord(dna"ACGT")
-    function TypedRecord(seq::T) where T
-        TypedRecord{T, NoQuality}(EMPTY_ID, seq)
     end
 
 
@@ -64,6 +54,11 @@ struct TypedRecord{T, Q <: AbstractQuality}
     end
 
     # DNARecord("Ricky", "ACGT", "!!!!")
+    function TypedRecord{T}(id::AbstractString, seq::T, qual::Any) where T
+        TypedRecord{T, QualityScores}(id, seq, QualityScores(qual))
+    end
+
+    # DNARecord("Ricky", "ACGT", "!!!!")
     function TypedRecord{T}(id::AbstractString, seq::Any, qual::Any) where T
         TypedRecord{T, QualityScores}(id, T(seq), QualityScores(qual))
     end
@@ -71,29 +66,6 @@ struct TypedRecord{T, Q <: AbstractQuality}
     # TypedRecord("Ricky", dna"ACGT", "!!!!")
     function TypedRecord(id::AbstractString, seq::T, qual::Any) where T
         TypedRecord{T, QualityScores}(id, seq, QualityScores(qual))
-    end
-
-
-    # DNARecord("ACGT", QualityScores("!!!!"))
-    function TypedRecord{T}(seq::AbstractString, qs::QualityScores) where T
-        TypedRecord{T, QualityScores}(EMPTY_ID, T(seq), qs)
-    end
-
-    # DNARecord{QualityScores}("ACGT", "!!!!")
-    function TypedRecord{T, QualityScores}(seq::Any, qual::Any) where T
-        TypedRecord{T, QualityScores}(EMPTY_ID, T(seq), QualityScores(qual))
-    end
-
-    # not DNARecord("ACGT", "!!!!")
-    # DNARecord(rna"ACGT", "!!!!")
-    # DNARecord(dna"ACGT", "!!!!")
-    function TypedRecord{T}(seq::Any, qual::Any) where T
-        TypedRecord{T, QualityScores}(EMPTY_ID, T(seq), QualityScores(qual))
-    end
-
-    # TypedRecord(dna"ACGT", "!!!!")
-    function TypedRecord(seq::T, qual::Any) where T
-        TypedRecord{T, QualityScores}(EMPTY_ID, seq, QualityScores(qual))
     end
 
 

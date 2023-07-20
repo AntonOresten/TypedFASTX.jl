@@ -1,9 +1,12 @@
 @testset "qualityscores.jl" begin
 
-    qs1 = QualityScores("!!!!", :sanger)
+    qs1 = QualityScores("!!!!")
     qs2 = QualityScores("@@@@", :solexa)
+    @test qs1 == QualityScores("!!!!", :sanger)
     @test qs1 != qs2
     @test qs1.values == qs2.values 
+    @test length(qs1) == 4
+    @test qs1[1] == 0
 
     @test QualityScores(qs1) == qs1
     @test String(qs1) == "!!!!"

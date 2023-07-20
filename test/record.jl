@@ -2,34 +2,22 @@
 
     @testset "NoQuality" begin
         rec1 = DNARecord("Ricky", dna"ACGT")
-        rec2 = DNARecord(dna"ACGT")
 
         @test rec1 == DNARecord{NoQuality}("Ricky", dna"ACGT")
         @test rec1 == DNARecord{NoQuality}("Ricky", "ACGT")
+        @test rec1 == DNARecord("Ricky", dna"ACGT")
         @test rec1 == DNARecord("Ricky", "ACGT")
         @test rec1 == TypedRecord("Ricky", dna"ACGT")
-        
-        @test rec2 == DNARecord{NoQuality}("ACGT")
-        @test rec2 == DNARecord("ACGT")
-        @test rec2 == TypedRecord(dna"ACGT")
     end
 
     @testset "QualityScores" begin
         rec1 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
-        rec2 = DNARecord(dna"ACGT", QualityScores("!!!!"))
 
         @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", QualityScores("!!!!"))
         @test rec1 == DNARecord{QualityScores}("Ricky", "ACGT", "!!!!")
+        @test rec1 == DNARecord("Ricky", dna"ACGT", "!!!!")
         @test rec1 == DNARecord("Ricky", "ACGT", "!!!!")
         @test rec1 == TypedRecord("Ricky", dna"ACGT", "!!!!")
-
-        @test rec2 == DNARecord{QualityScores}("ACGT", QualityScores("!!!!"))
-        @test rec2 == DNARecord{QualityScores}("ACGT", "!!!!")
-        @test rec2 == DNARecord(dna"ACGT", "!!!!")
-        @test rec2 == TypedRecord(dna"ACGT", QualityScores("!!!!"))
-        @test rec2 == TypedRecord(dna"ACGT", "!!!!")
-
-        @test rec2 == DNARecord("ACGT", QualityScores("!!!!"))
     end
 
     @testset "TypedRecord to TypedRecord" begin
