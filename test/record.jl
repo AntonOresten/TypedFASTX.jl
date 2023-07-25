@@ -40,6 +40,7 @@
 
     @test identifier(rec1) == "Ricky"
     @test sequence(rec1) == dna"ACGT"
+    @test sequence(LongDNA{4}, rec1) == dna"ACGT"
     @test sequence(String, rec1) == "ACGT"
 
     @test quality(rec1) == QualityScores(Int8[0, 0, 0, 0], FASTQ.SANGER_QUAL_ENCODING)
