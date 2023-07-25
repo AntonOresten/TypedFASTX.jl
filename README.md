@@ -11,6 +11,7 @@ TypedFASTX.jl aims to enhance readability and reduce potential errors when deali
 
 ## Performance
 TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl)'s LongSequence type stores sequence information more efficiently. However, this approach might be slightly slower compared to, for instance, storing each field in its own vector, due to the additional overhead required to keep it flexible and user-friendly.
+TypedRecords also take more time to write to files, as the sequences need to be encoded back to ASCII to be stored in FASTA/FASTQ format. As it currently stands, TypedFASTX.jl should perhaps not be used if writing records to files is a potential bottleneck for the speed of your program. When it comes to reading, it should be about as fast as just using plain FASTX.jl.
 
 ## Installation
 
