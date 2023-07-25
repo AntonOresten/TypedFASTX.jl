@@ -32,6 +32,9 @@ mutable struct TypedReader{T, Q <: AbstractQuality}
     end
 end
 
+const TypedFASTAReader = TypedReader{T, NoQuality} where T
+const TypedFASTQReader = TypedReader{T, QualityScores} where T
+
 const StringReader = TypedReader{String}
 const DNAReader = TypedReader{LongDNA{4}}
 const RNAReader = TypedReader{LongRNA{4}}
@@ -62,7 +65,7 @@ end=#
 
 Base.close(tr::TypedReader) = close(tr.reader)
 Base.eltype(::TypedReader{T, Q}) where {T, Q} = TypedRecord{T, Q}
-Base.eltype(::Type{<:TypedReader{T, Q}}) where {T, Q} = TypedRecord{T, Q}
+Base.eltype(::Type{TypedReader{T, Q}}) where {T, Q} = TypedRecord{T, Q}
 
 has_index(tr::TypedReader{T, NoQuality}) where T = !isnothing(tr.reader.index)
 Base.length(tr::TypedReader{T, NoQuality}) where T = has_index(tr) ? length(tr.reader.index.lengths) : error("Length cannot be determined without an index.")
@@ -118,10 +121,6 @@ function Base.iterate(tr::TypedReader{T, NoQuality}, state) where T
     (typed_record, new_state)
 end
 
-function Base.collect(tr::TypedReader{T, Q}) where {T, Q}
-    collect(TypedRecord{T, Q}, tr.reader)
-end
-
 # QualityScores
 
 # Define Base.getindex(reader::TypedRecord{T, QualityScores}...) using ReadDatastores?
@@ -155,28 +154,8 @@ function Base.in(record::TypedRecord, tr::TypedReader{T, NoQuality}) where T
     haskey(tr.reader.index.names, identifier(record))
 end
 
-function Base.in(record::TypedRecord, tr::TypedReader{T, QualityScores}) where T
-    error("Can't check if $record is in TypedReader because it wraps a FASTQ reader.")
-end
-
-# take n records from a TypedReader
-function Base.take!(reader::TypedReader, n::Real = Inf)
-    records = Vector{eltype(reader)}()
-    if n < 1
-        return records
-    end
-    i = 0
-    for record in reader
-        push!(records, record)
-        i += 1
-        if i >= n
-            break
-        end
-    end
-    if i < n && !isinf(n)
-        @warn "Reached end of file before taking $n records. $(length(records)) records taken from \"$(reader.path)\"."
-    end
-    records
+function Base.in(record::TypedRecord, ::TypedReader{T, QualityScores}) where T
+    error("Can't check if $record is in TypedReader because it wraps a FASTQ reader without an index.")
 end
 
 import FASTX: index!
@@ -191,7 +170,38 @@ function index!(tr::TypedReader{T, NoQuality}) where T
     tr
 end
 
-# Need different methods depending on Q because if Q isn't NoQuality, encoding_name argument is needed
+
+function Base.collect(tr::TypedReader;
+    min_length::Integer = 0, max_length::Real = Inf
+)
+    records = collect(eltype(tr), tr.reader)
+    filter!(r -> min_length <= length(r) <= max_length, records)
+end
+
+# take n records from a TypedReader
+function Base.take!(reader::TypedReader, n::Real = Inf;
+    min_length::Integer = 0, max_length::Real = Inf
+)
+    records = Vector{eltype(reader)}()
+    if n < 1
+        return records
+    end
+    i = 0
+    for record in reader
+        if !(min_length <= length(record) <= max_length)
+            continue
+        end
+        push!(records, record)
+        i += 1
+        if i >= n
+            break
+        end
+    end
+    if i < n && !isinf(n)
+        @warn "Reached end of file before taking $n records. $(length(records)) records taken from \"$(reader.path)\"."
+    end
+    records
+end
 
 # read_fasta and read_fastq calls TypedReader accordingly
 # readdatastore field?

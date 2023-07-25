@@ -6,6 +6,7 @@ module TypedFASTX
         error_probs,
 
         # quality.jl
+        AbstractQuality,
         NoQuality,
         NO_QUALITY,
 

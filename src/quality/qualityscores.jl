@@ -18,11 +18,9 @@ struct QualityScores <: AbstractQuality
         encoding = encoding_name_to_quality_encoding(encoding_name)
         QualityScores(str, encoding)
     end
-    
-    function QualityScores(quality_scores::QualityScores)
-        quality_scores
-    end
 end
+
+QualityScores(q::AbstractQuality) = q
 
 Base.hash(qs::QualityScores, h::UInt) = hash(qs.values, hash(qs.encoding, h))
 Base.:(==)(qs1::QualityScores, qs2::QualityScores) = hash(qs1) == hash(qs2)

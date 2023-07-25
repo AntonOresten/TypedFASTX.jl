@@ -48,6 +48,11 @@ struct TypedRecord{T, Q <: AbstractQuality}
         new{T, QualityScores}(id, seq, qs)
     end
 
+    # DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
+    function TypedRecord{T, QualityScores}(id::AbstractString, seq::T, qs::NoQuality) where T
+        new{T, NoQuality}(id, seq, qs)
+    end
+
     # DNARecord{QualityScores}("Ricky", "ACGT", "!!!!")
     function TypedRecord{T, QualityScores}(id::AbstractString, seq::Any, qual::Any) where T
         TypedRecord{T, QualityScores}(id, T(seq), QualityScores(qual))
