@@ -120,6 +120,7 @@ import FASTX: identifier, sequence, quality
 @inline identifier(record::TypedRecord) = record.identifier
 
 @inline sequence(record::TypedRecord) = record.sequence
+@inline sequence(::Type{T}, record::TypedRecord{T}) where T = record.sequence
 @inline sequence(::Type{T}, record::TypedRecord) where T = T(record.sequence)
 
 @inline quality(record::TypedRecord) = record.quality
