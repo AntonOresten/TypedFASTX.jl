@@ -61,6 +61,9 @@ fastq_file = "data/seqs.fastq"
         
         seekrecord(tr, 1)
         @test length(@test_logs (:warn,) take!(tr, 5)) == 4
+        
+        seekrecord(tr, 1)
+        @test isempty(@test_logs (:warn,) take!(tr, 4, max_length=0))
     end
 
     @testset "FASTA without index" begin

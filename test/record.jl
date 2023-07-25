@@ -8,6 +8,7 @@
         @test rec1 == DNARecord("Ricky", dna"ACGT")
         @test rec1 == DNARecord("Ricky", "ACGT")
         @test rec1 == TypedRecord("Ricky", dna"ACGT")
+        @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
     end
 
     @testset "QualityScores" begin
