@@ -61,8 +61,16 @@
     end
 
     @testset "reverse_complement" begin
-        rec1 = DNARecord("ACGT")
-        rec2 = DNARecord("ACGT", QualityScores("!!!!"))
+        rec1 = DNARecord("AC")
+        rec2 = DNARecord("AC", QualityScores("!~"))
+
+        @test reverse_complement(rec1) == DNARecord("GT")
+        @test reverse_complement(rec2) == DNARecord("GT", QualityScores("~!"))
+
+        reverse_complement!(rec1)
+        reverse_complement!(rec2)
+        @test rec1 == DNARecord("GT")
+        @test rec2 == DNARecord("GT", QualityScores("~!"))
     end
 
     rec0 = DNARecord("Ricky", dna"ACGT")

@@ -18,6 +18,12 @@
     @test isnothing(show(io, qs2))
     @test String(take!(io)) == "@@@@"
 
+    qs3 = QualityScores("!~")
+    qs4 = QualityScores("~!")
+    @test reverse(qs3) == qs4
+    @test reverse!(qs3) == qs4
+    @test qs3 == qs4
+
     @test summary(qs1) == "QualityScores"
 
     io = IOBuffer()

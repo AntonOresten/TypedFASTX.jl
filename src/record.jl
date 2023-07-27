@@ -161,14 +161,23 @@ import FASTX: description, identifier, sequence, quality
 @inline has_quality(record::TypedRecord) = record.quality isa QualityScores
 @inline quality_values(record::TypedRecord) = has_quality(record) ? record.quality.values : nothing
 
-import BioSequences: reverse_complement
-
-function reverse_complement(record::TypedRecord{T, NoQuality}) where T <: Union{LongDNA, LongRNA}
+function BioSequences.reverse_complement(record::TypedRecord{T, NoQuality}) where T <: Union{LongDNA, LongRNA}
     TypedRecord{T}(description(record), reverse_complement(sequence(record)))
 end
 
-function reverse_complement(record::TypedRecord{T, QualityScores}) where T <: Union{LongDNA, LongRNA}
-    TypedRecord{T}(description(record), reverse_complement(sequence(record)), reverse(quality_values(record)))
+function BioSequences.reverse_complement(record::TypedRecord{T, QualityScores}) where T <: Union{LongDNA, LongRNA}
+    TypedRecord{T}(description(record), reverse_complement(record.sequence), reverse(record.quality))
+end
+
+function BioSequences.reverse_complement!(record::TypedRecord{T, NoQuality}) where T <: Union{LongDNA, LongRNA}
+    reverse_complement!(record.sequence)
+    record
+end
+
+function BioSequences.reverse_complement!(record::TypedRecord{T, QualityScores}) where T <: Union{LongDNA, LongRNA}
+    reverse_complement!(record.sequence)
+    reverse!(record.quality)
+    record
 end
 
 """
