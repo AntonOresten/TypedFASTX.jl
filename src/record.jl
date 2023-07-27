@@ -1,4 +1,4 @@
-const EMPTY_ID = ""
+const EMPTY_NAME = ""
 
 """
     TypedRecord{T}
@@ -6,102 +6,119 @@ const EMPTY_ID = ""
 A type to represent a generic biological sequence record. 
 
 ### Fields
-- `identifier::String`: The unique identifier for the sequence.
+- `description::String`: The unique description for the sequence.
 - `sequence::T`: The sequence itself. It can be of any type, including: `String`, `LongDNA{4}`, `LongRNA{4}` or `LongAA`.
 - `quality::AbstractQuality`: The quality scores associated with the sequence. `Nothing` indicates absence of quality scores.
 """
 struct TypedRecord{T, Q <: AbstractQuality}
-    identifier::String
+    description::String
     sequence::T
     quality::Q
 
     # DNARecord{NoQuality}("Ricky", dna"ACGT")
-    function TypedRecord{T, NoQuality}(id::AbstractString, seq::T) where T
-        new{T, NoQuality}(id, seq, NO_QUALITY)
+    function TypedRecord{T, NoQuality}(name::AbstractString, seq::T) where T
+        new{T, NoQuality}(name, seq, NO_QUALITY)
     end
 
     # DNARecord{NoQuality}("Ricky", "ACGT")
-    function TypedRecord{T, NoQuality}(id::AbstractString, seq::Any) where T
-        TypedRecord{T, NoQuality}(id, T(seq))
+    function TypedRecord{T, NoQuality}(name::AbstractString, seq::Any) where T
+        TypedRecord{T, NoQuality}(name, T(seq))
     end
 
     # DNARecord("Ricky", dna"ACGT")
-    function TypedRecord{T}(id::AbstractString, seq::T) where T
-        TypedRecord{T, NoQuality}(id, seq)
+    function TypedRecord{T}(name::AbstractString, seq::T) where T
+        TypedRecord{T, NoQuality}(name, seq)
     end
 
     # DNARecord("Ricky", "ACGT")
-    function TypedRecord{T}(id::AbstractString, seq::Any) where T
-        TypedRecord{T, NoQuality}(id, T(seq))
+    function TypedRecord{T}(name::AbstractString, seq::Any) where T
+        TypedRecord{T, NoQuality}(name, T(seq))
     end
 
     # TypedRecord("Ricky", dna"ACGT")
-    function TypedRecord(id::AbstractString, seq::T) where T
-        TypedRecord{T, NoQuality}(id, seq)
+    function TypedRecord(name::AbstractString, seq::T) where T
+        TypedRecord{T, NoQuality}(name, seq)
     end
 
 
     # DNARecord{QualityScores}("Ricky", dna"ACGT", QualityScores("!!!!"))
-    function TypedRecord{T, QualityScores}(id::AbstractString, seq::T, qs::QualityScores) where T
+    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qs::QualityScores) where T
         seq_len, qs_len = length(seq), length(qs)
-        @assert seq_len == qs_len "$(TypedRecord{T}) \"$id\": sequence length ($seq_len) does not match quality length ($qs_len)."
-        new{T, QualityScores}(id, seq, qs)
+        @assert seq_len == qs_len "$(TypedRecord{T}) \"$name\": sequence length ($seq_len) does not match quality length ($qs_len)."
+        new{T, QualityScores}(name, seq, qs)
     end
 
     # DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
-    function TypedRecord{T, QualityScores}(id::AbstractString, seq::T, qs::NoQuality) where T
-        new{T, NoQuality}(id, seq, qs)
+    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qs::NoQuality) where T
+        new{T, NoQuality}(name, seq, qs)
     end
 
     # DNARecord{QualityScores}("Ricky", "ACGT", "!!!!")
-    function TypedRecord{T, QualityScores}(id::AbstractString, seq::Any, qual::Any) where T
-        TypedRecord{T, QualityScores}(id, T(seq), QualityScores(qual))
+    function TypedRecord{T, QualityScores}(name::AbstractString, seq::Any, qual::Any) where T
+        TypedRecord{T, QualityScores}(name, T(seq), QualityScores(qual))
+    end
+
+    # DNARecord("Ricky", dna"ACGT", "!!!!")
+    function TypedRecord{T}(name::AbstractString, seq::T, qual::Any) where T
+        TypedRecord{T, QualityScores}(name, seq, QualityScores(qual))
     end
 
     # DNARecord("Ricky", "ACGT", "!!!!")
-    function TypedRecord{T}(id::AbstractString, seq::T, qual::Any) where T
-        TypedRecord{T, QualityScores}(id, seq, QualityScores(qual))
-    end
-
-    # DNARecord("Ricky", "ACGT", "!!!!")
-    function TypedRecord{T}(id::AbstractString, seq::Any, qual::Any) where T
-        TypedRecord{T, QualityScores}(id, T(seq), QualityScores(qual))
+    function TypedRecord{T}(name::AbstractString, seq::Any, qual::Any) where T
+        TypedRecord{T, QualityScores}(name, T(seq), QualityScores(qual))
     end
 
     # TypedRecord("Ricky", dna"ACGT", "!!!!")
-    function TypedRecord(id::AbstractString, seq::T, qual::Any) where T
-        TypedRecord{T, QualityScores}(id, seq, QualityScores(qual))
+    function TypedRecord(name::AbstractString, seq::T, qual::Any) where T
+        TypedRecord{T, QualityScores}(name, seq, QualityScores(qual))
     end
 
 
     # DNARecord{NoQuality}(RNARecord("Ricky", "ACGU"))
     function TypedRecord{T, NoQuality}(record::TypedRecord{<:Any, NoQuality}) where T
-        TypedRecord{T, NoQuality}(record.identifier, record.sequence)
+        TypedRecord{T, NoQuality}(record.description, record.sequence)
     end
     
     # DNARecord{NoQuality}(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T, NoQuality}(record::TypedRecord{<:Any, QualityScores}) where T
-        TypedRecord{T, NoQuality}(record.identifier, record.sequence)
+        TypedRecord{T, NoQuality}(record.description, record.sequence)
     end
 
     # DNARecord(RNARecord("Ricky", "ACGU"))
     function TypedRecord{T}(record::TypedRecord{<:Any, NoQuality}) where T
-        TypedRecord{T, NoQuality}(record.identifier, record.sequence)
+        TypedRecord{T, NoQuality}(record.description, record.sequence)
     end
     
     # DNARecord{QualityScores}(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T, QualityScores}(record::TypedRecord{<:Any, QualityScores}) where T
-        TypedRecord{T, QualityScores}(record.identifier, record.sequence, record.quality)
+        TypedRecord{T, QualityScores}(record.description, record.sequence, record.quality)
     end
 
     # DNARecord(RNARecord("Ricky", "ACGU", "!!!!"))
     function TypedRecord{T}(record::TypedRecord{<:Any, QualityScores}) where T
-        TypedRecord{T, QualityScores}(record.identifier, record.sequence, record.quality)
+        TypedRecord{T, QualityScores}(record.description, record.sequence, record.quality)
     end
 
     # TypedRecord(DNARecord("Ricky", "ACGT", "!!!!"))
     function TypedRecord(record::TypedRecord{T, Q}) where {T, Q}
-        new{T, Q}(record.identifier, record.sequence, record.quality)
+        new{T, Q}(record.description, record.sequence, record.quality)
+    end
+
+    # DNARecord("ACGT")
+    function TypedRecord{T}(seq::Any) where T
+        TypedRecord{T}(EMPTY_NAME, seq)
+    end
+
+    # quality needs to be a QualityScores instance to avoid ambiguity
+    # DNARecord(dna"ACGT", QualityScores("!!!!"))
+    function TypedRecord{T}(seq::Any, qs::QualityScores) where T
+        TypedRecord{T}(EMPTY_NAME, T(seq), qs)
+    end
+
+    # this method is needed cause otherwise there's ambiguity with DNARecord(name::AbstractString, seq::Any)
+    # DNARecord("ACGT", QualityScores("!!!!"))
+    function TypedRecord{T}(seq::AbstractString, qs::QualityScores) where T
+        TypedRecord{T}(EMPTY_NAME, T(seq), qs)
     end
 end
 
@@ -110,16 +127,19 @@ const DNARecord = TypedRecord{LongDNA{4}}
 const RNARecord = TypedRecord{LongRNA{4}}
 const AARecord = TypedRecord{LongAA}
 
-Base.hash(r::TypedRecord, h::UInt) = hash(r.identifier, hash(r.sequence, hash(r.quality, h)))
-Base.:(==)(r1::TypedRecord, r2::TypedRecord) = hash(r1) == hash(r2)
+Base.hash(r::TypedRecord, h::UInt) = hash(r.description, hash(r.sequence, hash(r.quality, h)))
+Base.:(==)(r1::TypedRecord, r2::TypedRecord) = r1.description == r2.description && r1.sequence == r2.sequence && r1.quality == r2.quality
+Base.isless(r1::TypedRecord, r2::TypedRecord) = isless(r1.sequence, r2.sequence)
 
 @inline Base.length(record::TypedRecord) = length(record.sequence)
 
-import FASTX: identifier, sequence, quality
+import FASTX: description, identifier, sequence, quality
 
-@inline identifier(record::TypedRecord) = record.identifier
+@inline description(record::TypedRecord) = record.description
+@inline identifier(record::TypedRecord) = first(split(record.description))
 
 @inline sequence(record::TypedRecord) = record.sequence
+@inline sequence(::Type{T}, record::TypedRecord{T}) where T = record.sequence
 @inline sequence(::Type{T}, record::TypedRecord) where T = T(record.sequence)
 
 @inline quality(record::TypedRecord) = record.quality
@@ -145,17 +165,17 @@ function Base.summary(::TypedRecord{T}) where T
 end
 
 function Base.print(io::IO, record::TypedRecord{T, NoQuality}) where T
-    print(io, ">$(identifier(record))\n$(sequence(record))")
+    print(io, ">$(description(record))\n$(sequence(record))")
 end
 
 function Base.print(io::IO, record::TypedRecord{T, QualityScores}) where T
-    print(io, "@$(identifier(record))\n$(sequence(record))\n+\n$(quality(record))")
+    print(io, "@$(description(record))\n$(sequence(record))\n+\n$(quality(record))")
 end
 
 function Base.show(io::IO, record::TypedRecord{T, NoQuality}) where T
     print(io,
         summary(record), '(',
-        repr(identifier(record)),
+        repr(description(record)),
         ", ", repr(FASTX.truncate(String(sequence(record)), 20)),
         ')'
     )
@@ -164,7 +184,7 @@ end
 function Base.show(io::IO, record::TypedRecord{T, QualityScores}) where T
     print(io,
         summary(record), '(',
-        repr(identifier(record)),
+        repr(description(record)),
         ", ", repr(FASTX.truncate(String(sequence(record)), 20)),
         ", ", repr(FASTX.truncate(String(quality(record)), 20)),
         ')'
@@ -173,13 +193,13 @@ end
 
 function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord{T, NoQuality}) where T
     print(io, "$(summary(record)):")
-    print(io, "\n identifier: ", isempty(identifier(record)) ? "<empty>" : repr(identifier(record)))
+    print(io, "\n description: ", isempty(description(record)) ? "<empty>" : repr(description(record)))
     print(io, "\n   sequence: ", repr(FASTX.truncate(String(sequence(record)), 40)))
 end
 
 function Base.show(io::IO, ::MIME"text/plain", record::TypedRecord{T, QualityScores}) where T
     print(io, "$(summary(record)):")
-    print(io, "\n identifier: ", isempty(identifier(record)) ? "<empty>" : repr(identifier(record)))
+    print(io, "\n description: ", isempty(description(record)) ? "<empty>" : repr(description(record)))
     print(io, "\n   sequence: ", repr(FASTX.truncate(String(sequence(record)), 40)))
     print(io, "\n    quality: ", repr(FASTX.truncate(String(quality(record)), 40)))
 end

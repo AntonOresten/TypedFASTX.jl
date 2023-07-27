@@ -22,8 +22,8 @@ end
 Base.close(tw::TypedWriter) = close(tw.io)
 
 # print is probably reeeaally sloow. TranscodingStream faster? or convert to FASTXRecord first?
-print_fasta(io::IO, record::TypedRecord{T, Q}) where {T, Q} = print(io, ">$(identifier(record))\n$(sequence(record))")
-print_fastq(io::IO, record::TypedRecord{T, QualityScores}) where T = print(io, "@$(identifier(record))\n$(sequence(record))\n+\n$(quality(record))")
+print_fasta(io::IO, record::TypedRecord{T, Q}) where {T, Q} = print(io, ">$(description(record))\n$(sequence(record))")
+print_fastq(io::IO, record::TypedRecord{T, QualityScores}) where T = print(io, "@$(description(record))\n$(sequence(record))\n+\n$(quality(record))")
 
 function Base.write(tw::TypedWriter{T, NoQuality}, record::TypedRecord{T, Q}) where {T, Q}
     print_fasta(tw.io, record)

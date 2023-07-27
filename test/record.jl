@@ -9,6 +9,8 @@
         @test rec1 == DNARecord("Ricky", "ACGT")
         @test rec1 == TypedRecord("Ricky", dna"ACGT")
         @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
+
+        @test DNARecord("ACGT") == DNARecord("", "ACGT")
     end
 
     @testset "QualityScores" begin
@@ -19,6 +21,9 @@
         @test rec1 == DNARecord("Ricky", dna"ACGT", "!!!!")
         @test rec1 == DNARecord("Ricky", "ACGT", "!!!!")
         @test rec1 == TypedRecord("Ricky", dna"ACGT", "!!!!")
+
+        @test DNARecord("ACGT", QualityScores("!!!!")) == DNARecord("", "ACGT", "!!!!")
+        @test DNARecord(dna"ACGT", QualityScores("!!!!")) == DNARecord("", "ACGT", "!!!!")
     end
 
     @testset "TypedRecord to TypedRecord" begin
@@ -32,14 +37,29 @@
         @test DNARecord(rec2) == rec2
         @test TypedRecord(rec1) == rec1
     end
-    
+
+    @testset "Sorting" begin
+        rec1 = DNARecord("Mickey", dna"TGCA")
+        rec2 = DNARecord("Ricky", dna"ACGT")
+        @test sort([rec1, rec2]) == [rec2, rec1]
+    end
+
+    @testset "description vs identifier" begin
+        record = AARecord("ricky the record", aa"SMITH")
+        @test description(record) == "ricky the record"
+        @test identifier(record) == "ricky"
+    end
+
     rec0 = DNARecord("Ricky", dna"ACGT")
     rec1 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
 
+    @test hash(rec0) == hash(DNARecord("Ricky", dna"ACGT"))
+
     @test length(rec1) == 4
 
-    @test identifier(rec1) == "Ricky"
+    @test description(rec1) == "Ricky"
     @test sequence(rec1) == dna"ACGT"
+    @test sequence(LongDNA{4}, rec1) == dna"ACGT"
     @test sequence(String, rec1) == "ACGT"
 
     @test quality(rec1) == QualityScores(Int8[0, 0, 0, 0], FASTQ.SANGER_QUAL_ENCODING)
@@ -81,11 +101,11 @@
     io = IOBuffer()
     Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Ricky", "ACGT"))
     str = String(take!(io))
-    @test str == "DNARecord:\n identifier: \"Ricky\"\n   sequence: \"ACGT\""
+    @test str == "DNARecord:\n description: \"Ricky\"\n   sequence: \"ACGT\""
 
     io = IOBuffer()
     Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Ricky", "ACGT", "!!!!"))
     str = String(take!(io))
-    @test str == "DNARecord:\n identifier: \"Ricky\"\n   sequence: \"ACGT\"\n    quality: \"!!!!\""
+    @test str == "DNARecord:\n description: \"Ricky\"\n   sequence: \"ACGT\"\n    quality: \"!!!!\""
 
 end

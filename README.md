@@ -6,12 +6,12 @@
 [![Status](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/anton083/TypedFASTX.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/anton083/TypedFASTX.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/anton083/TypedFASTX.jl)
 
-TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using typed records. It is largely based on BioJulia's [FASTX.jl](https://github.com/BioJulia/FASTX.jl) package, whose records are un-typed, i.e. they are agnostic to what kind of data they contain. Besides from the sequence field, the TypedRecord type also has an identifier and an optional quality field.
-TypedFASTX.jl aims to enhance readability and reduce potential errors when dealing with different types of biological sequences. It also enforces type safety and allows you to define different methods for specific record types.
+TypedFASTX.jl is a Julia package for working with FASTA and FASTQ files using typed records. It is largely based on BioJulia's [FASTX.jl](https://github.com/BioJulia/FASTX.jl) package, whose records are un-typed, i.e. they are agnostic to what kind of data they contain. Besides from the sequence field, the TypedRecord type also has an description and an optional quality field.
+TypedFASTX.jl aims to enhance readability and reduce potential errors when dealing with different types of biological sequences. It also allows you to define different methods for specific record types.
 
 ## Performance
 TypedRecords generally take up less memory than FASTX.jl records, since [BioSequences.jl](https://github.com/BioJulia/BioSequences.jl)'s LongSequence type stores sequence information more efficiently. However, this approach might be slightly slower compared to, for instance, storing each field in its own vector, due to the additional overhead required to keep it flexible and user-friendly.
-TypedRecords also take more time to write to files, as the sequences need to be encoded back to ASCII to be stored in FASTA/FASTQ format. As it currently stands, TypedFASTX.jl should perhaps not be used if writing records to files is a potential bottleneck for the speed of your program. When it comes to reading, it should be about as fast as just using plain FASTX.jl.
+TypedFASTX.jl is a little slower than FASTX.jl at writing records to files, as the sequences need to be encoded back to ASCII bytes (which is done through string interpolation) to be stored in FASTA/FASTQ format. One benchmark showed that writing records takes about twice as long compared to FASTX.jl. When it comes to reading, it should be almost as fast as just using plain FASTX.jl (including sequence type conversions).
 
 ## Installation
 
