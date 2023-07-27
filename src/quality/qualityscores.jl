@@ -31,6 +31,13 @@ Base.getindex(qs::QualityScores, i::Integer) = qs.values[i]
 encode_quality(qs::QualityScores) = qs.values .+ qs.encoding.offset
 Base.String(qs::QualityScores) = String(UInt8.(encode_quality(qs)))
 
+Base.reverse(qs::QualityScores) = QualityScores(reverse(qs.values), qs.encoding)
+
+function Base.reverse!(qs::QualityScores)
+    reverse!(qs.values)
+    qs
+end
+
 function Base.summary(io::IO, ::QualityScores)
     print(io, "$(QualityScores)")
 end
