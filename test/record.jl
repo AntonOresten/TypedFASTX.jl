@@ -10,7 +10,9 @@
         @test rec1 == TypedRecord("Ricky", dna"ACGT")
         @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
 
-        @test DNARecord("ACGT") == DNARecord("", "ACGT")
+        rec2 = DNARecord("", "ACGT")
+        @test DNARecord("ACGT") == rec2
+        @test TypedRecord(dna"ACGT") == rec2
     end
 
     @testset "QualityScores" begin
@@ -22,8 +24,14 @@
         @test rec1 == DNARecord("Ricky", "ACGT", "!!!!")
         @test rec1 == TypedRecord("Ricky", dna"ACGT", "!!!!")
 
-        @test DNARecord("ACGT", QualityScores("!!!!")) == DNARecord("", "ACGT", "!!!!")
-        @test DNARecord(dna"ACGT", QualityScores("!!!!")) == DNARecord("", "ACGT", "!!!!")
+        rec2 = DNARecord("", "ACGT", "!!!!")
+        @test rec2 == DNARecord(rna"ACGU", QualityScores("!!!!"))
+        @test rec2 == DNARecord(rna"ACGU", "!!!!")
+        @test rec2 == DNARecord(dna"ACGT", "!!!!")
+        @test rec2 == DNARecord("ACGT", QualityScores("!!!!"))
+        @test rec2 == TypedRecord(dna"ACGT", QualityScores("!!!!"))
+        @test rec2 == TypedRecord(dna"ACGT", "!!!!")
+        @test_throws ErrorException DNARecord("ACGT", "!!!!") # seq would be name and qual would be seq
     end
 
     @testset "TypedRecord to TypedRecord" begin
@@ -48,6 +56,13 @@
         record = AARecord("ricky the record", aa"SMITH")
         @test description(record) == "ricky the record"
         @test identifier(record) == "ricky"
+
+        @test identifier(DNARecord("", "ACGT")) == ""
+    end
+
+    @testset "reverse_complement" begin
+        rec1 = DNARecord("ACGT")
+        rec2 = DNARecord("ACGT", QualityScores("!!!!"))
     end
 
     rec0 = DNARecord("Ricky", dna"ACGT")

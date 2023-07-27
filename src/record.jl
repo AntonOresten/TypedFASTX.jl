@@ -42,15 +42,15 @@ struct TypedRecord{T, Q <: AbstractQuality}
 
 
     # DNARecord{QualityScores}("Ricky", dna"ACGT", QualityScores("!!!!"))
-    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qs::QualityScores) where T
-        seq_len, qs_len = length(seq), length(qs)
-        @assert seq_len == qs_len "$(TypedRecord{T}) \"$name\": sequence length ($seq_len) does not match quality length ($qs_len)."
-        new{T, QualityScores}(name, seq, qs)
+    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qual::QualityScores) where T
+        seq_len, qual_len = length(seq), length(qual)
+        @assert seq_len == qual_len "$(TypedRecord{T}) \"$name\": sequence length ($seq_len) does not match quality length ($qual_len)."
+        new{T, QualityScores}(name, seq, qual)
     end
 
     # DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
-    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qs::NoQuality) where T
-        new{T, NoQuality}(name, seq, qs)
+    function TypedRecord{T, QualityScores}(name::AbstractString, seq::T, qual::NoQuality) where T
+        new{T, NoQuality}(name, seq, qual)
     end
 
     # DNARecord{QualityScores}("Ricky", "ACGT", "!!!!")
@@ -106,19 +106,34 @@ struct TypedRecord{T, Q <: AbstractQuality}
 
     # DNARecord("ACGT")
     function TypedRecord{T}(seq::Any) where T
-        TypedRecord{T}(EMPTY_NAME, seq)
+        TypedRecord{T, NoQuality}(EMPTY_NAME, seq)
     end
 
-    # quality needs to be a QualityScores instance to avoid ambiguity
-    # DNARecord(dna"ACGT", QualityScores("!!!!"))
-    function TypedRecord{T}(seq::Any, qs::QualityScores) where T
-        TypedRecord{T}(EMPTY_NAME, T(seq), qs)
+    # DNARecord(rna"ACGU", QualityScores("!!!!"))
+    # DNARecord(rna"ACGU", "!!!!")
+    function TypedRecord{T}(seq::Any, qual::Any) where T
+        TypedRecord{T, QualityScores}(EMPTY_NAME, T(seq), qual)
     end
 
-    # this method is needed cause otherwise there's ambiguity with DNARecord(name::AbstractString, seq::Any)
+    # needed to avoid ambiguity with DNARecord(name::AbstractString, seq::Any)
     # DNARecord("ACGT", QualityScores("!!!!"))
-    function TypedRecord{T}(seq::AbstractString, qs::QualityScores) where T
-        TypedRecord{T}(EMPTY_NAME, T(seq), qs)
+    function TypedRecord{T}(seq::AbstractString, qual::QualityScores) where T
+        TypedRecord{T, QualityScores}(EMPTY_NAME, T(seq), qual)
+    end
+
+    # TypedRecord(dna"ACGT")
+    function TypedRecord(seq::T) where T
+        TypedRecord{T, NoQuality}(EMPTY_NAME, seq)
+    end
+
+    # TypedRecord(dna"ACGT", QualityScores("!!!!"))
+    function TypedRecord(seq::T, qual::QualityScores) where T
+        TypedRecord{T, QualityScores}(EMPTY_NAME, seq, qual)
+    end
+
+    # TypedRecord(dna"ACGT", "!!!!")
+    function TypedRecord(seq::T, qual::Any) where T
+        TypedRecord{T, QualityScores}(EMPTY_NAME, seq, qual)
     end
 end
 
@@ -136,7 +151,7 @@ Base.isless(r1::TypedRecord, r2::TypedRecord) = isless(r1.sequence, r2.sequence)
 import FASTX: description, identifier, sequence, quality
 
 @inline description(record::TypedRecord) = record.description
-@inline identifier(record::TypedRecord) = first(split(record.description))
+@inline identifier(record::TypedRecord) = first(split(record.description, ' '))
 
 @inline sequence(record::TypedRecord) = record.sequence
 @inline sequence(::Type{T}, record::TypedRecord{T}) where T = record.sequence
@@ -145,6 +160,16 @@ import FASTX: description, identifier, sequence, quality
 @inline quality(record::TypedRecord) = record.quality
 @inline has_quality(record::TypedRecord) = record.quality isa QualityScores
 @inline quality_values(record::TypedRecord) = has_quality(record) ? record.quality.values : nothing
+
+import BioSequences: reverse_complement
+
+function reverse_complement(record::TypedRecord{T, NoQuality}) where T <: Union{LongDNA, LongRNA}
+    TypedRecord{T}(description(record), reverse_complement(sequence(record)))
+end
+
+function reverse_complement(record::TypedRecord{T, QualityScores}) where T <: Union{LongDNA, LongRNA}
+    TypedRecord{T}(description(record), reverse_complement(sequence(record)), reverse(quality_values(record)))
+end
 
 """
     error_prob_generator(record::TypedRecord)
