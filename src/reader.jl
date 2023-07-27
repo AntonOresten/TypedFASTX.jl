@@ -151,7 +151,7 @@ function Base.in(record::TypedRecord, tr::TypedReader{T, NoQuality}) where T
     if !has_index(tr)
         error("Can't check if $record is in TypedReader because it does not have an index.")
     end
-    haskey(tr.reader.index.names, identifier(record))
+    haskey(tr.reader.index.names, description(record))
 end
 
 function Base.in(record::TypedRecord, ::TypedReader{T, QualityScores}) where T

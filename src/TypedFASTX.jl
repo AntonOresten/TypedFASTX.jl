@@ -20,6 +20,7 @@ module TypedFASTX
         RNARecord,
         AARecord,
 
+        description,
         identifier,
         sequence,
         quality,
