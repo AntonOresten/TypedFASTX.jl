@@ -53,6 +53,8 @@
     rec0 = DNARecord("Ricky", dna"ACGT")
     rec1 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
 
+    @test hash(rec0) == hash(DNARecord("Ricky", dna"ACGT"))
+
     @test length(rec1) == 4
 
     @test description(rec1) == "Ricky"
