@@ -66,6 +66,8 @@
 
     @testset "show" begin
 
+        summary(TypedFASTA.Reader{LongDNA{4}}(fasta_file)) == "TypedFASTX.TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}"
+
         @testset "long" begin
             reader = TypedFASTA.Reader{LongDNA{4}}(fasta_file)
             io = IOBuffer()

@@ -16,9 +16,11 @@
         @test tw.path == path
         @test tw.io isa IOStream
         @test tw.position == 1
-        write(tw, StringRecord("Rick", "ACGT"))
+        record = StringRecord("Rick", "ACGT")
+        @test record == write(tw, record)
+        @test record == write(tw, StringRecord("Rick", "ACGT", "!!!!"))
         close(tw)
-        @test read(path) == codeunits(">Rick\nACGT\n")
+        @test read(path) == codeunits(">Rick\nACGT\n>Rick\nACGT\n")
         rm(path)
     end
 

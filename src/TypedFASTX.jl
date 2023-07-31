@@ -19,10 +19,18 @@ export
     # FASTA,
     TypedFASTA,
     TypedFASTARecord,
+    StringFASTARecord,
+    DNAFASTARecord,
+    RNAFASTARecord,
+    AAFASTARecord,
 
     # FASTQ,
     TypedFASTQ,
     TypedFASTQRecord,
+    StringFASTQRecord,
+    DNAFASTQRecord,
+    RNAFASTQRecord,
+    AAFASTQRecord,
     QualityScores,
 
     description,

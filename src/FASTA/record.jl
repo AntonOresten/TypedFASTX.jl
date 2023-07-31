@@ -14,14 +14,18 @@ struct Record{T} <: AbstractRecord{T}
     end
 end
 
-function Base.convert(::Type{Record{T}}, record::Union{FASTX.FASTA.Record, FASTX.FASTQ.Record}) where T
+function Base.convert(::Type{Record{T}}, record::AbstractRecord{T}) where T
+    Record{T}(description(record), sequence(record))
+end
+
+function Base.convert(::Type{Record{T}}, record::FASTX.Record) where T
     Record{T}(
         description(record),
         sequence(T, record))
 end
 
-function Base.convert(::Type{AbstractRecord{T}}, fasta_record::FASTX.FASTA.Record) where T
-    convert(Record{T}, fasta_record)
+function Base.convert(::Type{AbstractRecord{T}}, record::FASTX.Record) where T
+    convert(Record{T}, record)
 end
 
 function Base.convert(::Type{FASTX.FASTA.Record}, record::AbstractRecord{T}) where T
@@ -33,12 +37,6 @@ end
 function Base.convert(::Type{FASTX.FASTQ.Record}, ::Record{T}) where T
     error("Can't convert a `$(Record{T})` with no quality to a `FASTX.FASTQ.Record`.")
 end
-
-
-const StringRecord = Record{String}
-const DNARecord = Record{LongDNA{4}}
-const RNARecord = Record{LongRNA{4}}
-const AARecord = Record{LongAA}
 
 Base.hash(r::Record, h::UInt) = hash(r.description, hash(r.sequence, h))
 Base.:(==)(r1::Record{T}, r2::Record{T}) where T = r1.description == r2.description && r1.sequence == r2.sequence
