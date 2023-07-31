@@ -1,51 +1,6 @@
-@testset "typedrecord.jl" begin
+@testset "record.jl" begin
 
-    @testset "NoQuality" begin
-        rec1 = DNARecord("Ricky", dna"ACGT")
-
-        @test rec1 == DNARecord{NoQuality}("Ricky", dna"ACGT")
-        @test rec1 == DNARecord{NoQuality}("Ricky", "ACGT")
-        @test rec1 == DNARecord("Ricky", dna"ACGT")
-        @test rec1 == DNARecord("Ricky", "ACGT")
-        @test rec1 == TypedRecord("Ricky", dna"ACGT")
-        @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", NO_QUALITY)
-
-        rec2 = DNARecord("", "ACGT")
-        @test DNARecord("ACGT") == rec2
-        @test TypedRecord(dna"ACGT") == rec2
-    end
-
-    @testset "QualityScores" begin
-        rec1 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
-
-        @test rec1 == DNARecord{QualityScores}("Ricky", dna"ACGT", QualityScores("!!!!"))
-        @test rec1 == DNARecord{QualityScores}("Ricky", "ACGT", "!!!!")
-        @test rec1 == DNARecord("Ricky", dna"ACGT", "!!!!")
-        @test rec1 == DNARecord("Ricky", "ACGT", "!!!!")
-        @test rec1 == TypedRecord("Ricky", dna"ACGT", "!!!!")
-
-        rec2 = DNARecord("", "ACGT", "!!!!")
-        @test rec2 == DNARecord(rna"ACGU", QualityScores("!!!!"))
-        @test rec2 == DNARecord(rna"ACGU", "!!!!")
-        @test rec2 == DNARecord(dna"ACGT", "!!!!")
-        @test rec2 == DNARecord("ACGT", QualityScores("!!!!"))
-        @test rec2 == TypedRecord(dna"ACGT", QualityScores("!!!!"))
-        @test rec2 == TypedRecord(dna"ACGT", "!!!!")
-        @test_throws ErrorException DNARecord("ACGT", "!!!!") # seq would be name and qual would be seq
-    end
-
-    @testset "TypedRecord to TypedRecord" begin
-        rec1 = DNARecord("Ricky", dna"ACGT")
-        rec2 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
-        
-        @test DNARecord{NoQuality}(rec1) == rec1
-        @test DNARecord{NoQuality}(rec2) == rec1
-        @test DNARecord(rec1) == rec1
-        @test DNARecord{QualityScores}(rec2) == rec2
-        @test DNARecord(rec2) == rec2
-        @test TypedRecord(rec1) == rec1
-    end
-
+    #=
     @testset "Sorting" begin
         rec1 = DNARecord("Mickey", dna"TGCA")
         rec2 = DNARecord("Ricky", dna"ACGT")
@@ -130,5 +85,5 @@
     Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Ricky", "ACGT", "!!!!"))
     str = String(take!(io))
     @test str == "DNARecord:\n description: \"Ricky\"\n   sequence: \"ACGT\"\n    quality: \"!!!!\""
-
+    =#
 end

@@ -1,52 +1,67 @@
 module TypedFASTX
 
-    export
-        # probability.jl
-        error_prob_generator,
-        error_probs,
+export
+    # probability.jl
+    error_prob_generator,
+    error_probs,
 
-        # quality.jl
-        AbstractQuality,
-        NoQuality,
-        NO_QUALITY,
+    # quality.jl
+    QualityScores,
 
-        # qualityscores.jl
-        QualityScores,
+    # record.jl
+    AbstractRecord,
+    StringRecord,
+    DNARecord,
+    RNARecord,
+    AARecord,
 
-        # record.jl
-        TypedRecord,
-        StringRecord,
-        DNARecord,
-        RNARecord,
-        AARecord,
+    # FASTA,
+    TypedFASTA,
+    TypedFASTARecord,
 
-        description,
-        identifier,
-        sequence,
-        quality,
-        has_quality,
-        quality_values,
+    # FASTQ,
+    TypedFASTQ,
+    TypedFASTQRecord,
+    QualityScores,
 
-        # reader.jl
-        TypedReader,
-        has_index,
-        seekrecord,
-        index!,
-        StringReader,
-        DNAReader,
-        RNAReader,
-        AAReader,
+    description,
+    identifier,
+    sequence,
+    quality,
+    quality_values,
 
-        # writer.jl
-        TypedWriter
+    # reader.jl
+    AbstractReader,
+    has_index,
+    seekrecord,
+    index!,
+    StringReader,
+    DNAReader,
+    RNAReader,
+    AAReader
 
-    using FASTX
-    using BioSequences
+import FASTX
+using BioSequences
 
-    include("quality/quality.jl")
-    include("record.jl")
-    include("conversion.jl")
-    include("reader.jl")
-    include("writer.jl")
+include("record.jl")
+include("reader.jl")
+include("writer.jl")
+include("quality/quality.jl")
+
+include("FASTA/TypedFASTA.jl")
+include("FASTQ/TypedFASTQ.jl")
+
+const TypedFASTARecord = TypedFASTA.Record
+const TypedFASTQRecord = TypedFASTQ.Record
+
+const TypedFASTAReader = TypedFASTA.Reader
+const TypedFASTQReader = TypedFASTQ.Reader
+
+const TypedFASTAWriter = TypedFASTA.Writer
+const TypedFASTQWriter = TypedFASTQ.Writer
+
+import .TypedFASTQ: quality_values
+
+include("conversion.jl")
 
 end
