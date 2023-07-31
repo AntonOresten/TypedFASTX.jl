@@ -15,6 +15,29 @@ struct Record{T} <: AbstractRecord{T}
     end
 end
 
+function Base.convert(::Type{Record{T}}, fastq_record::FASTX.FASTQ.Record, encoding::FASTX.FASTQ.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
+    Record{T}(
+        description(fastq_record),
+        sequence(T, fastq_record),
+        collect(FASTX.quality_scores(fastq_record, encoding)))
+end
+
+function Base.convert(::Type{Record{T}}, ::FASTX.FASTA.Record, ::FASTX.FASTQ.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
+    error("Can't convert a `FASTX.FASTA.Record` to a `$(TypedFASTQ.Record{T})` with quality.")
+end
+
+function Base.convert(::Type{AbstractRecord{T}}, fastq_record::FASTX.FASTQ.Record) where T
+    convert(Record{T}, fastq_record)
+end
+
+function Base.convert(::Type{FASTX.FASTQ.Record}, record::Record{T}) where T
+    FASTX.FASTQ.Record(
+        description(record),
+        sequence(String, record),
+        quality_values(record),
+        offset=record.quality.encoding.offset)
+end
+
 const StringRecord = Record{String}
 const DNARecord = Record{LongDNA{4}}
 const RNARecord = Record{LongRNA{4}}

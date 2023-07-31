@@ -1,43 +1,27 @@
-@testset "TypedWriter" begin
+@testset "writer.jl" begin
 
-    @testset "FASTA" begin
-
-        @testset "Writing to IOBuffer" begin
-            io = IOBuffer()
-            tw = TypedWriter{String, NoQuality}(io)
-            @test tw.path == "no path"
-            @test tw.io == io
-            @test tw.position == 1
-            write(tw, StringRecord("Rick", "ACGT"))
-            @test String(take!(io)) == ">Rick\nACGT\n"
-        end
-
-        @testset "Writing to file" begin
-            path = "temp.fasta"
-            tw = TypedWriter{String, NoQuality}(path)
-            @test tw.path == path
-            @test tw.io isa IOStream
-            @test tw.position == 1
-            write(tw, StringRecord("Rick", "ACGT"))
-            close(tw)
-            @test read(path) == codeunits(">Rick\nACGT\n")
-            rm(path)
-        end
-
-    end
-
-    @testset "FASTQ" begin
-
-        @testset "Writing to IOBuffer" begin
-            io = IOBuffer()
-            tw = TypedWriter{String, QualityScores}(io)
-            @test tw.path == "no path"
-            @test tw.io == io
-            @test tw.position == 1
-            write(tw, StringRecord("Rick", "ACGT", "!!!!"))
-            @test String(take!(io)) == "@Rick\nACGT\n+\n!!!!\n"
-        end
+    @testset "AbstractWriter" begin
         
+        @testset "FASTA" begin
+            path = "temp.fasta"
+            w = DNAWriter(path)
+            @test w.path == path
+            write(w, DNARecord("Ricky", "ACGT"))
+            close(w)
+            @test read("temp.fasta") == codeunits(">Ricky\nACGT\n")
+            rm("temp.fasta")
+        end
+
+        @testset "FASTQ" begin
+            path = "temp.fastq"
+            w = DNAWriter(path)
+            @test w.path == path
+            write(w, DNARecord("Ricky", "ACGT", "!!!!"))
+            close(w)
+            @test read("temp.fastq") == codeunits("@Ricky\nACGT\n+\n!!!!\n")
+            rm("temp.fastq")
+        end
+
     end
 
 end

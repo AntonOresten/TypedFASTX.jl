@@ -39,7 +39,22 @@ export
     StringReader,
     DNAReader,
     RNAReader,
-    AAReader
+    AAReader,
+
+    # writer.jl
+    StringWriter,
+    DNAWriter,
+    RNAWriter,
+    AAWriter,
+
+    TypedFASTARecord,
+    TypedFASTQRecord,
+
+    TypedFASTAReader,
+    TypedFASTQReader,
+
+    TypedFASTAWriter,
+    TypedFASTQWriter
 
 import FASTX
 import Statistics
@@ -62,8 +77,7 @@ const TypedFASTQReader = TypedFASTQ.Reader
 const TypedFASTAWriter = TypedFASTA.Writer
 const TypedFASTQWriter = TypedFASTQ.Writer
 
+import .TypedFASTA: has_index
 import .TypedFASTQ: quality_values
-
-include("conversion.jl")
 
 end

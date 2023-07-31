@@ -7,13 +7,11 @@ mutable struct Reader{T} <: AbstractReader{T}
         io = open(path)
         reader = FASTX.FASTAReader(io, copy=false)
         if create_index
-            index = faidx(io)
-            FASTX.FASTAindex!(reader, index)
+            index = FASTX.faidx(io)
+            FASTX.FASTA.index!(reader, index)
             seekrecord(reader, 1)
         end
-        reader = new{T}(path, reader, 1)
-        finalizer(close, reader)
-        reader
+        new{T}(path, reader, 1)
     end
 end
 
@@ -25,7 +23,7 @@ function Base.summary(R::Type{Reader{T}}) where T
 end
 
 function Base.show(io::IO, reader::Reader{T}) where T
-    print(io, "$(summary(reader))($(repr(reader.path)), $(reader.position))") # reconsider this show method
+    print(io, "$(summary(reader))($(repr(reader.path)))")
 end
 
 function Base.show(io::IO, ::MIME"text/plain", reader::Reader{T}) where T
@@ -49,23 +47,23 @@ function seekrecord(reader::Reader{T}, i::Integer) where T
 end
 
 function Base.getindex(reader::Reader{T}, s::AbstractString) where T
-    Record{T}(reader.reader[s])
+    convert(Record{T}, reader.reader[s])
 end
 
 function Base.getindex(reader::Reader{T}, i::Integer) where T
     seekrecord(reader, i)
-    Record{T}(first(reader.reader))
+    convert(Record{T}, first(reader.reader))
 end
 
 function Base.getindex(reader::Reader{T}, inds::Array{<:Integer}) where T
     (minimum(inds) < 1 || maximum(inds) > length(reader)) && error("Some indices outside of range $(1:length(reader))")
-    Record{T}[reader[i] for i in inds]
+    Record{T}[convert(Record{T}, reader[i]) for i in inds]
 end
 
 function Base.getindex(reader::Reader{T}, r::UnitRange{<:Integer}) where T
     (r.start < 1 || r.stop > length(reader)) && error("Some indices outside of range $(1:length(reader))")
     seekrecord(reader, r.start)
-    [Record{T}(record) for (i, record) in zip(r, reader.reader)]
+    Record{T}[convert(Record{T}, record) for (i, record) in zip(r, reader.reader)]
 end
 
 function Base.iterate(reader::Reader{T}) where T
@@ -73,7 +71,7 @@ function Base.iterate(reader::Reader{T}) where T
     record_state = iterate(reader.reader)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    record = Record{T}(record)
+    record = convert(Record{T}, record)
     (record, new_state)
 end
 
@@ -82,7 +80,7 @@ function Base.iterate(reader::Reader{T}, state) where T
     record_state = iterate(reader.reader, state)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    record = Record{T}(record)
+    record = convert(Record{T}, record)
     (record, new_state)
 end
 
@@ -102,8 +100,8 @@ import FASTX: index!
 function index!(reader::Reader{T}) where T
     if !has_index(reader)
         open(reader.path) do io
-            index = faidx(io)
-            FASTX.FASTAindex!(reader.reader, index)
+            index = FASTX.faidx(io)
+            FASTX.FASTA.index!(reader.reader, index)
         end
     end
     reader
@@ -144,3 +142,8 @@ function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
     end
     records
 end
+
+# Define Base.getindex(reader::TypedFASTQRecord{T}...) using ReadDatastores?
+
+# readdatastore field?
+# readdatastores creates fastq ds file

@@ -21,4 +21,4 @@ function Base.write(w::Writer{T}, record::Record{T}) where T
     record
 end
 
-Base.eltype(::Writer{T}) where T = Record{T}
+Base.write(w::Writer{T}, record::AbstractRecord{T}) where T = write(w, convert(Record{T}, record))

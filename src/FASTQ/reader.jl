@@ -5,11 +5,8 @@ mutable struct Reader{T} <: AbstractReader{T}
     encoding::FASTX.QualityEncoding
 
     function Reader{T}(path::String, encoding::FASTX.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
-        reader = FASTX.FASTQ.Reader(open(path), copy=false)
-        reader = new{T}(path, reader, 1)
-        reader.encoding = encoding
-        finalizer(close, reader)
-        reader
+        fq_reader = FASTX.FASTQ.Reader(open(path), copy=false)
+        new{T}(path, fq_reader, 1, encoding)
     end
 end
 
@@ -32,7 +29,7 @@ function Base.summary(R::Type{Reader{T}}) where T
 end
 
 function Base.show(io::IO, reader::Reader{T}) where T
-    print(io, "$(summary(reader))($(repr(reader.path)), $(reader.position))") # reconsider this show method
+    print(io, "$(summary(reader))($(repr(reader.path)))")
 end
 
 function Base.show(io::IO, ::MIME"text/plain", reader::Reader{T}) where T
@@ -46,7 +43,7 @@ function Base.iterate(reader::Reader{T}) where T
     record_state = iterate(reader.reader)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    typed_record = TypedFASTQRecord{T}(record, reader.encoding)
+    typed_record = convert(Record{T}, record, reader.encoding)
     (typed_record, new_state)
 end
 
@@ -55,7 +52,7 @@ function Base.iterate(reader::Reader{T}, state) where T
     record_state = iterate(reader.reader, state)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    typed_record = TypedFASTQRecord{T}(record, reader.encoding)
+    typed_record = convert(Record{T}, record, reader.encoding)
     (typed_record, new_state)
 end
 
@@ -91,7 +88,7 @@ function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
     end
     i = 0
     for record in reader
-        if !(check_length(r, min_length, max_length) && check_error_rate(r, max_error_rate))
+        if !(check_length(record, min_length, max_length) && check_error_rate(record, max_error_rate))
             continue
         end
         push!(records, record)
