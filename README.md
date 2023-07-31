@@ -21,18 +21,41 @@ To install the package, you can use the Julia package manager. From the Julia RE
 add TypedFASTX
 ```
 
-## Example
-You can create TypedRecords in a variety of ways! Here are some ways to create DNA records (without qualities):
+## Example usage
 
 ```julia
-using TypedFASTX, BioSequences, FASTX
+julia> using TypedFASTX, FASTX, BioSequences
 
-record1 = DNARecord("Ricky", "ACGTA")
-record2 = DNARecord(FASTARecord("Ricky", "ACGTA"))
-record3 = TypedRecord("Ricky", dna"ACGTA")
-record4 = TypedRecord{LongDNA{4}}("Ricky", "ACGTA")
+julia> ricky = AARecord("Ricky Smith", "SMITH")
+TypedFASTX.TypedFASTA.Record{LongAA}:
+ description: "Ricky Smith"
+    sequence: "SMITH"
 
-record1 == record2 == record3 == record4 # true
+julia> sequence(ricky)
+5aa Amino Acid Sequence:
+SMITH
+
+julia> mickey = DNARecord("Mickey Smith", "GATTACA", "quAliTy") # quality is optional
+TypedFASTX.TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}:
+ description: "Mickey Smith"
+    sequence: "GATTACA"
+     quality: "quAliTy"
+
+julia> sequence(mickey)
+7nt DNA Sequence:
+GATTACA
+
+julia> sequence(String, mickey)
+"GATTACA"
+
+julia> error_rate(mickey)
+9.128727304334052e-5
+
+julia> description(mickey)
+"Mickey Smith"
+
+julia> identifier(mickey)
+"Mickey"
 ```
 
 Check out the documentation for more detailed information on how to use the package.
