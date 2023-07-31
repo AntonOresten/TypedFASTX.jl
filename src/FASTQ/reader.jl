@@ -1,11 +1,11 @@
 mutable struct Reader{T} <: AbstractReader{T}
     path::String
-    reader::FASTQ.Reader
+    reader::FASTX.FASTQ.Reader
     position::Int
-    encoding::QualityEncoding
+    encoding::FASTX.QualityEncoding
 
-    function Reader{T}(path::String, encoding::QualityEncoding = FASTQ.SANGER_QUAL_ENCODING) where T
-        reader = FASTQ.Reader(open(path), copy=false)
+    function Reader{T}(path::String, encoding::FASTX.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
+        reader = FASTX.FASTQ.Reader(open(path), copy=false)
         reader = new{T}(path, reader, 1)
         reader.encoding = encoding
         finalizer(close, reader)
@@ -63,11 +63,11 @@ function Base.in(record::Record, ::Reader{T}) where T
     error("Can't check if $record is in TypedFASTQ.Reader because it wraps a FASTX.FASTQ.Reader without an index.")
 end
 
-@inline function check_length(record::Record{T}, min_length::Int, max_length::Int)
+@inline function check_length(record::Record{T}, min_length::Int, max_length::Int) where T
     min_length <= length(record) <= max_length
 end
 
-@inline function check_error_rate(record::Record{T}, max_error_rate::Float64)
+@inline function check_error_rate(record::Record{T}, max_error_rate::Float64) where T
     error_rate(record) < max_error_rate
 end
 
@@ -91,7 +91,7 @@ function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
     end
     i = 0
     for record in reader
-        if !(check_length(r, min_length, max_length) && check_error_rate(r, max_error_rate)))
+        if !(check_length(r, min_length, max_length) && check_error_rate(r, max_error_rate))
             continue
         end
         push!(records, record)

@@ -73,6 +73,8 @@ Creates a vector of error probabilities for each character in the sequence.
 """
 error_probs(record::Record) = error_probs(record.quality)
 
+import ..TypedFASTX: error_rate
+
 """
     error_rate(record::Record)
 

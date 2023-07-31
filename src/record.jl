@@ -5,9 +5,8 @@ const DNARecord = AbstractRecord{LongDNA{4}}
 const RNARecord = AbstractRecord{LongRNA{4}}
 const AARecord = AbstractRecord{LongAA}
 
-@inline Base.isless(r1::AbstractRecord, r2::AbstractRecord) = isless(r1.sequence, r2.sequence)
-
 @inline Base.length(record::AbstractRecord) = length(record.sequence)
+@inline Base.isless(r1::AbstractRecord, r2::AbstractRecord) = isless(r1.sequence, r2.sequence)
 
 import FASTX: description, identifier, sequence
 

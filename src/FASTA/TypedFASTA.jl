@@ -1,6 +1,12 @@
 module TypedFASTA
 
-import ..TypedFASTX: AbstractRecord, description, identifier, sequence, AbstractWriter
+import ..TypedFASTX:
+    AbstractRecord,
+    description,
+    identifier,
+    sequence,
+    AbstractReader,
+    AbstractWriter
 
 import FASTX
 using BioSequences

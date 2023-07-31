@@ -1,9 +1,13 @@
 @testset "record.jl" begin
 
-    #=
+    @testset "Length" begin
+        @test length(DNARecord("Ricky", "ACGT")) == 4
+        @test length(DNARecord("Ricky", "ACGT", QualityScores("!!!!"))) == 4
+    end
+
     @testset "Sorting" begin
-        rec1 = DNARecord("Mickey", dna"TGCA")
-        rec2 = DNARecord("Ricky", dna"ACGT")
+        rec1 = DNARecord("Mickey", "TGCA")
+        rec2 = DNARecord("Ricky", "ACGT")
         @test sort([rec1, rec2]) == [rec2, rec1]
     end
 
@@ -15,37 +19,15 @@
         @test identifier(DNARecord("", "ACGT")) == ""
     end
 
-    @testset "reverse_complement" begin
-        rec1 = DNARecord("AC")
-        rec2 = DNARecord("AC", QualityScores("!~"))
-
-        @test reverse_complement(rec1) == DNARecord("GT")
-        @test reverse_complement(rec2) == DNARecord("GT", QualityScores("~!"))
-
-        reverse_complement!(rec1)
-        reverse_complement!(rec2)
-        @test rec1 == DNARecord("GT")
-        @test rec2 == DNARecord("GT", QualityScores("~!"))
+    @testset "sequence" begin
+        record = DNARecord("Ricky", "ACGT")
+        @test sequence(record) == dna"ACGT"
+        @test sequence(LongDNA{4}, record) == dna"ACGT"
+        @test sequence(LongDNA{4}, record) === record.sequence
+        @test sequence(String, record) == "ACGT"
     end
 
-    rec0 = DNARecord("Ricky", dna"ACGT")
-    rec1 = DNARecord("Ricky", dna"ACGT", QualityScores("!!!!"))
-
-    @test hash(rec0) == hash(DNARecord("Ricky", dna"ACGT"))
-
-    @test length(rec1) == 4
-
-    @test description(rec1) == "Ricky"
-    @test sequence(rec1) == dna"ACGT"
-    @test sequence(LongDNA{4}, rec1) == dna"ACGT"
-    @test sequence(String, rec1) == "ACGT"
-
-    @test quality(rec1) == QualityScores(Int8[0, 0, 0, 0], FASTQ.SANGER_QUAL_ENCODING)
-    @test quality_values(rec1) == Int8[0, 0, 0, 0]
-
-    rec2 = DNARecord("Ricky", "ACGT", QualityScores("@@@@", :solexa))
-    @test rec1 != rec2
-    @test quality_values(rec1) == quality_values(rec2)
+    #=
 
     rec3 = TypedRecord("Morty", "Smith", "!!!!!")
     @test rec3 isa StringRecord

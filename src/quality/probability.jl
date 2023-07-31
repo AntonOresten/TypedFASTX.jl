@@ -9,4 +9,4 @@ end
 
 @inline error_probs(qs::QualityScores) = error_prob_function(qs.encoding).(qs.values)
 
-@inline error_rate(qs::QualityScores) = mean(error_prob_generator(qs))
+@inline error_rate(qs::QualityScores) = Statistics.mean(error_prob_generator(qs))

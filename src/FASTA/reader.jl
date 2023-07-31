@@ -1,14 +1,14 @@
 mutable struct Reader{T} <: AbstractReader{T}
     path::String
-    reader::FASTA.Reader
+    reader::FASTX.FASTA.Reader
     position::Int
 
     function Reader{T}(path::String, create_index::Bool=false) where T
         io = open(path)
-        reader = FASTA.Reader(io, copy=false)
+        reader = FASTX.FASTAReader(io, copy=false)
         if create_index
             index = faidx(io)
-            FASTA.index!(reader, index)
+            FASTX.FASTAindex!(reader, index)
             seekrecord(reader, 1)
         end
         reader = new{T}(path, reader, 1)
@@ -20,7 +20,7 @@ end
 Base.eltype(::Reader{T}) where T = Record{T}
 Base.eltype(::Type{Reader{T}}) where T = Record{T}
 
-function Base.summary(R::Type{Reader{T}})
+function Base.summary(R::Type{Reader{T}}) where T
     "$(R)"
 end
 
@@ -92,7 +92,7 @@ function Base.in(record::Record, reader::Reader{T}) where T
         return false
     end
     if !has_index(reader)
-        error("Can't check if $record is in TypedFASTA.Reader because it does not have an index.")
+        error("Can't check if $record is in TypedFASTX.FASTAReader because it does not have an index.")
     end
     haskey(reader.reader.index.names, description(record))
 end
@@ -103,13 +103,13 @@ function index!(reader::Reader{T}) where T
     if !has_index(reader)
         open(reader.path) do io
             index = faidx(io)
-            FASTA.index!(reader.reader, index)
+            FASTX.FASTAindex!(reader.reader, index)
         end
     end
     reader
 end
 
-@inline function check_length(record::Record{T}, min_length::Int, max_length::Int)
+@inline function check_length(record::Record{T}, min_length::Int, max_length::Int) where T
     min_length <= length(record) <= max_length
 end
 
@@ -123,7 +123,7 @@ end
 # take n records from a Reader
 function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
     min_length::Int = 0, max_length::Int = typemax(Int)
-)
+) where T
     records = Vector{Record{T}}()
     if n < 1
         return records

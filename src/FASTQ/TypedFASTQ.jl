@@ -1,6 +1,13 @@
 module TypedFASTQ
 
-import ..TypedFASTX: AbstractRecord, description, identifier, sequence, AbstractWriter, QualityScores
+import ..TypedFASTX:
+    AbstractRecord,
+    description,
+    identifier,
+    sequence,
+    AbstractReader,
+    AbstractWriter,
+    QualityScores
 
 import FASTX
 using BioSequences

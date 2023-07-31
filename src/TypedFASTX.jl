@@ -4,6 +4,7 @@ export
     # probability.jl
     error_prob_generator,
     error_probs,
+    error_rate,
 
     # quality.jl
     QualityScores,
@@ -41,6 +42,7 @@ export
     AAReader
 
 import FASTX
+import Statistics
 using BioSequences
 
 include("record.jl")
