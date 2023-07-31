@@ -11,6 +11,13 @@
         @test sequence(String, record) == "GATTACA"
     end
 
+    @testset "Conversion" begin
+        @test DNARecord("Ricky", "GATTACA") == convert(TypedFASTA.Record{LongDNA{4}}, FASTX.FASTA.Record("Ricky", "GATTACA"))
+        @test DNARecord("Ricky", "GATTACA") == convert(DNARecord, FASTX.FASTA.Record("Ricky", "GATTACA"))
+        @test FASTX.FASTA.Record("Ricky", "GATTACA") == convert(FASTX.FASTA.Record, DNARecord("Ricky", "GATTACA"))
+        @test_throws ErrorException convert(FASTX.FASTQ.Record, DNARecord("Ricky", "GATTACA"))
+    end
+
     @testset "AbstractRecord alias" begin
         @test DNARecord("Ricky", "GATTACA") == TypedFASTARecord{LongDNA{4}}("Ricky", "GATTACA")
         @test DNARecord("Ricky", "GATTACA") == DNARecord("Ricky", dna"GATTACA")
@@ -37,4 +44,13 @@
         @test record == record_rc
     end
     
+    @testset "show" begin
+        @test sprint(show, DNARecord("Ricky", "ACGT")) == "TypedFASTX.TypedFASTA.Record{LongSequence{DNAAlphabet{4}}}(\"Ricky\", \"ACGT\")"
+    
+        io = IOBuffer()
+        Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Ricky", "ACGT"))
+        str = String(take!(io))
+        @test str == "TypedFASTX.TypedFASTA.Record{LongSequence{DNAAlphabet{4}}}:\n description: \"Ricky\"\n    sequence: \"ACGT\""    
+    end
+
 end

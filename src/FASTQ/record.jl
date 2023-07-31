@@ -38,11 +38,6 @@ function Base.convert(::Type{FASTX.FASTQ.Record}, record::Record{T}) where T
         offset=record.quality.encoding.offset)
 end
 
-const StringRecord = Record{String}
-const DNARecord = Record{LongDNA{4}}
-const RNARecord = Record{LongRNA{4}}
-const AARecord = Record{LongAA}
-
 Base.hash(r::Record, h::UInt) = hash(r.description, hash(r.sequence, hash(r.quality, h)))
 Base.:(==)(r1::Record{T}, r2::Record{T}) where T = r1.description == r2.description && r1.sequence == r2.sequence && r1.quality == r2.quality
 
