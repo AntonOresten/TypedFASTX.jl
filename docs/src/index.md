@@ -17,7 +17,7 @@ FASTX records with typed sequences and optional qualities.
 ## Installation
 You can install TypedFASTX from the Julia REPL. Type `]` to enter the Pkg REPL mode and run:
 
-```julia
+```jldoctest
 (@v1.9) pkg> add TypedFASTX
 ```
 
