@@ -36,8 +36,6 @@ julia> (identifier(record), description(record), sequence(record))
 ("ricky", "ricky the record", GATTACA)
 ```
 
-This allows you to define different methods for specific record types. For instance, you can define a method for calculating the error rate of a FASTQ record, which is not possible with FASTX.jl.
-
 ```@index
 ```
 
