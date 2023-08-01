@@ -6,7 +6,7 @@ makedocs(;
     modules = [TypedFASTX],
     format = Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-    )
+    ),
     sitename = "TypedFASTX.jl",
     doctest = true,
     pages=[
