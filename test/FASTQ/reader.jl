@@ -4,6 +4,8 @@
 
     @testset "FASTQ" begin
         reader = TypedFASTQ.Reader{LongDNA{4}}(fastq_file)
+        @test eltype(reader) == TypedFASTQ.Record{LongDNA{4}}
+        @test eltype(typeof(reader)) == TypedFASTQ.Record{LongDNA{4}}
         @test reader.path == fastq_file
         @test reader.reader isa FASTQ.Reader
         @test reader.encoding == FASTQ.SANGER_QUAL_ENCODING
@@ -18,6 +20,13 @@
         @test length(collect(reader)) == 3
         reader = TypedFASTQ.Reader{LongDNA{4}}(fastq_file)
         @test length(take!(reader)) == 4
+
+        @test summary(reader) = "TypedFASTX.TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}"
+    
+        io = IOBuffer()
+        Base.invokelatest(show, io, MIME("text/plain"), reader)
+        str = String(take!(io))
+        @test str == "TypedFASTX.TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}:\n  path: \"data/seqs.fastq\"\n  position: 1"
     end
 
 end

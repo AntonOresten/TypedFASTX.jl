@@ -7,7 +7,10 @@ import ..TypedFASTX:
     sequence,
     AbstractReader,
     AbstractWriter,
-    QualityScores
+    QualityScores,
+    error_prob_generator,
+    error_probs,
+    error_rate
 
 import FASTX
 using BioSequences

@@ -27,6 +27,11 @@
         @test sequence(String, record) == "ACGT"
     end
 
+    @testset "Conversion" begin
+        @test FASTX.FASTA.Record("Rick", "ACGT") == convert(FASTX.FASTA.Record, DNARecord("Rick", "ACGT"))
+        @test FASTX.FASTA.Record("Rick", "ACGT") == convert(FASTX.FASTA.Record, DNARecord("Rick", "ACGT", "!!!!"))
+    end
+
     @test summary(DNARecord("", "")) == "TypedFASTX.TypedFASTA.Record{LongSequence{DNAAlphabet{4}}}"
 
     #=

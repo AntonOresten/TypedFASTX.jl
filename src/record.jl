@@ -20,3 +20,10 @@ import FASTX: description, identifier, sequence
 function Base.summary(R::AbstractRecord)
     string(typeof(R))
 end
+
+
+function Base.convert(::Type{FASTX.FASTA.Record}, record::AbstractRecord{T}) where T
+    FASTX.FASTA.Record(
+        description(record),
+        sequence(String, record))
+end

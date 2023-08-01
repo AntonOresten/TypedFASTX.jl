@@ -12,10 +12,10 @@
     end
 
     @testset "Conversion" begin
-        @test DNARecord("Ricky", "GATTACA") == convert(TypedFASTA.Record{LongDNA{4}}, FASTX.FASTA.Record("Ricky", "GATTACA"))
-        @test DNARecord("Ricky", "GATTACA") == convert(DNARecord, FASTX.FASTA.Record("Ricky", "GATTACA"))
-        @test FASTX.FASTA.Record("Ricky", "GATTACA") == convert(FASTX.FASTA.Record, DNARecord("Ricky", "GATTACA"))
-        @test_throws ErrorException convert(FASTX.FASTQ.Record, DNARecord("Ricky", "GATTACA"))
+        @test DNARecord("Rick", "ACGT") == convert(TypedFASTA.Record{LongDNA{4}}, DNARecord("Rick", "ACGT"))
+        @test DNARecord("Rick", "ACGT") == convert(TypedFASTA.Record{LongDNA{4}}, DNARecord("Rick", "ACGT", "!!!!"))
+        @test DNARecord("Rick", "ACGT") == convert(TypedFASTA.Record{LongDNA{4}}, FASTX.FASTA.Record("Rick", "ACGT"))
+        @test DNARecord("Rick", "ACGT") == convert(TypedFASTA.Record{LongDNA{4}}, FASTX.FASTQ.Record("Rick", "ACGT", "!!!!"))
     end
 
     @testset "AbstractRecord alias" begin

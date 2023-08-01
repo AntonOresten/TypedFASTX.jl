@@ -14,28 +14,16 @@ struct Record{T} <: AbstractRecord{T}
     end
 end
 
+# TypedFASTQ.Record -> TypedFASTA.Record
 function Base.convert(::Type{Record{T}}, record::AbstractRecord{T}) where T
     Record{T}(description(record), sequence(record))
 end
 
+# FASTX.Record -> TypedFASTA.Record
 function Base.convert(::Type{Record{T}}, record::FASTX.Record) where T
     Record{T}(
         description(record),
-        sequence(T, record))
-end
-
-function Base.convert(::Type{AbstractRecord{T}}, record::FASTX.Record) where T
-    convert(Record{T}, record)
-end
-
-function Base.convert(::Type{FASTX.FASTA.Record}, record::AbstractRecord{T}) where T
-    FASTX.FASTA.Record(
-        description(record),
         sequence(String, record))
-end
-
-function Base.convert(::Type{FASTX.FASTQ.Record}, ::Record{T}) where T
-    error("Can't convert a `$(Record{T})` with no quality to a `FASTX.FASTQ.Record`.")
 end
 
 Base.hash(r::Record, h::UInt) = hash(r.description, hash(r.sequence, h))

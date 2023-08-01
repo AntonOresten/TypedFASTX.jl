@@ -14,6 +14,12 @@
         @test quality_values(record) == quality_values(TypedFASTQRecord{LongDNA{4}}("Ricky the Record", "ACGT", QualityScores("@@@@", FASTQ.SOLEXA_QUAL_ENCODING)))
     end
 
+    @testset "Conversion" begin
+        @test DNARecord("Rick", "ACGT", "!!!!") == convert(TypedFASTQ.Record{LongDNA{4}}, DNARecord("Rick", "ACGT", "!!!!"))
+        @test DNARecord("Rick", "ACGT", "!!!!") == convert(TypedFASTQ.Record{LongDNA{4}}, FASTX.FASTQ.Record("Rick", "ACGT", "!!!!"))
+        @test FASTX.FASTQ.Record("Rick", "ACGT", "!!!!") == convert(FASTX.FASTQ.Record, DNARecord("Rick", "ACGT", "!!!!"))
+    end
+
     @testset "AbstractRecord alias" begin
         @test DNARecord("Rick", "ACGT", "!!!!") == TypedFASTQRecord{LongDNA{4}}("Rick", "ACGT", "!!!!")
         @test DNARecord("Rick", "ACGT", "!!!!") == DNARecord("Rick", dna"ACGT", "!!!!")
@@ -38,6 +44,14 @@
         @test reverse_complement(record) == record_rc
         reverse_complement!(record)
         @test record == record_rc
+    end
+
+    @testset "Quality" begin
+        record = DNARecord("", "ACGT", "!!!!")
+        @test quality(record) == QualityScores("!!!!")
+        @test quality_values(record) == Int8[0, 0, 0, 0]
+        @test error_prob_generator(record) == error_prob_generator(record.quality)
+        @test error_probs(record) == error_probs(record.quality)
     end
     
     @testset "show" begin

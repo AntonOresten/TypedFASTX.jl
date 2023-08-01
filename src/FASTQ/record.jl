@@ -22,14 +22,6 @@ function Base.convert(::Type{Record{T}}, fastq_record::FASTX.FASTQ.Record, encod
         collect(FASTX.quality_scores(fastq_record, encoding)))
 end
 
-function Base.convert(::Type{Record{T}}, ::FASTX.FASTA.Record, ::FASTX.FASTQ.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
-    error("Can't convert a `FASTX.FASTA.Record` to a `$(TypedFASTQ.Record{T})` with quality.")
-end
-
-function Base.convert(::Type{AbstractRecord{T}}, fastq_record::FASTX.FASTQ.Record) where T
-    convert(Record{T}, fastq_record)
-end
-
 function Base.convert(::Type{FASTX.FASTQ.Record}, record::Record{T}) where T
     FASTX.FASTQ.Record(
         description(record),

@@ -4,6 +4,8 @@
     
     @testset "FASTA with index" begin
         reader = TypedFASTA.Reader{LongDNA{4}}(fasta_file, true)
+        @test eltype(reader) == TypedFASTA.Record{LongDNA{4}}
+        @test eltype(typeof(reader)) == TypedFASTA.Record{LongDNA{4}}
         @test reader.path == fasta_file
         @test reader.reader isa FASTX.FASTA.Reader
         @test reader isa TypedFASTA.Reader{LongDNA{4}}
