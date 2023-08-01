@@ -1,26 +1,23 @@
-using TypedFASTX
-using Documenter
+using Documenter, TypedFASTX
 
 DocMeta.setdocmeta!(TypedFASTX, :DocTestSetup, :(using TypedFASTX); recursive=true)
 
 makedocs(;
-    modules=[TypedFASTX],
-    authors="Anton Sollman <anton.sollman@outlook.com>",
-    repo="https://github.com/anton083/TypedFASTX.jl.git",
-    sitename="TypedFASTX.jl",
-    format=Documenter.HTML(;
+    modules = [TypedFASTX],
+    format = Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://anton083.github.io/TypedFASTX.jl",
-        edit_link="dev",
-        assets=String[],
-    ),
+    )
+    sitename = "TypedFASTX.jl",
+    doctest = true,
     pages=[
-        "Home" => "index.md",
+        "Overview" => "index.md",
     ],
+    authors = "Anton O. Sollman",
+    checkdocs = :all
 )
 
 deploydocs(;
-    repo="github.com/anton083/TypedFASTX.jl",
+    repo = "github.com/anton083/TypedFASTX.jl",
+    push_preview = true,
     branch = "gh-pages",
-    devbranch = "dev",
 )
