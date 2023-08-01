@@ -12,6 +12,7 @@
     @test all(<(1e-6), error_prob_generator(qs2))
 
     @test error_probs(qs1) == collect(error_prob_generator(qs1))
+    @test error_probs(qs2) == collect(error_prob_generator(qs2))
 
     qs3 = QualityScores(";;;;", SOLEXA)
     @test all(>(0.75), error_prob_generator(qs3))

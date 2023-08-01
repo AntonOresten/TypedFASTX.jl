@@ -22,6 +22,8 @@
             rm("temp.fastq")
         end
 
+        @test_throws ErrorException DNAWriter("invalid.ext")
+
     end
 
 end

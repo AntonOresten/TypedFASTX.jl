@@ -34,6 +34,9 @@
     str = String(take!(io))
     @test str == "QualityScores:\n  encoding: QualityEncoding(33, 126, 33)\n    values: Int8[0, 0, 0, 0]"
 
+    @test qs1[1] == qs1.values[1]
+    @test summary(qs1) == "QualityScores"
+
     include("probability.jl")
 
 end

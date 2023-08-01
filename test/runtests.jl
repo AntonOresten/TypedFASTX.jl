@@ -9,6 +9,7 @@ using FASTX, BioSequences
     include("record.jl")
     include("reader.jl")
     include("writer.jl")
+    include("quality/quality.jl")
 
     include("FASTA/TypedFASTA.jl")
     include("FASTQ/TypedFASTQ.jl")
