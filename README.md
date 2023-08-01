@@ -15,10 +15,10 @@ TypedFASTX.jl is a little slower than FASTX.jl at writing records to files, as t
 
 ## Installation
 
-To install the package, you can use the Julia package manager. From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
+You can install TypedFASTX from the Julia REPL. Type `]` to enter the Pkg REPL mode and run:
 
 ```
-add TypedFASTX
+(@v1.9) pkg> add TypedFASTX
 ```
 
 ## Example usage
@@ -39,7 +39,7 @@ julia> mickey = DNARecord("Mickey Smith", "GATTACA", "quAliTy") # quality is opt
 TypedFASTX.TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}:
  description: "Mickey Smith"
     sequence: "GATTACA"
-     quality: "quAliTy"
+     quality: "quAl!Ty"
 
 julia> sequence(mickey)
 7nt DNA Sequence:
