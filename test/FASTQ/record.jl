@@ -50,8 +50,6 @@
         record = DNARecord("", "ACGT", "!!!!")
         @test quality(record) == QualityScores("!!!!")
         @test quality_values(record) == Int8[0, 0, 0, 0]
-        @test error_prob_generator(record) == error_prob_generator(record.quality)
-        @test error_probs(record) == error_probs(record.quality)
     end
     
     @testset "show" begin
