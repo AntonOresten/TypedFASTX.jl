@@ -1,3 +1,8 @@
+"""
+    QualityScores
+
+A type for storing FASTQ quality with different encodings.
+"""
 struct QualityScores
     values::Vector{Int8}
     encoding::FASTX.FASTQ.QualityEncoding

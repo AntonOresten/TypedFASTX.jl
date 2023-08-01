@@ -1,38 +1,12 @@
 module TypedFASTX
 
 export
-    # probability.jl
-    error_prob_generator,
-    error_probs,
-    error_rate,
-
-    # quality.jl
-    QualityScores,
-
     # record.jl
     AbstractRecord,
     StringRecord,
     DNARecord,
     RNARecord,
     AARecord,
-
-    # FASTA,
-    TypedFASTA,
-    TypedFASTARecord,
-    StringFASTARecord,
-    DNAFASTARecord,
-    RNAFASTARecord,
-    AAFASTARecord,
-
-    # FASTQ,
-    TypedFASTQ,
-    TypedFASTQRecord,
-    StringFASTQRecord,
-    DNAFASTQRecord,
-    RNAFASTQRecord,
-    AAFASTQRecord,
-    QualityScores,
-
     description,
     identifier,
     sequence,
@@ -41,9 +15,6 @@ export
 
     # reader.jl
     AbstractReader,
-    has_index,
-    seekrecord,
-    index!,
     StringReader,
     DNAReader,
     RNAReader,
@@ -54,6 +25,32 @@ export
     DNAWriter,
     RNAWriter,
     AAWriter,
+
+    # quality
+    error_prob_generator,
+    error_probs,
+    error_rate,
+    QualityScores,
+
+    # FASTA
+    TypedFASTA,
+    TypedFASTARecord,
+    StringFASTARecord,
+    DNAFASTARecord,
+    RNAFASTARecord,
+    AAFASTARecord,
+    has_index,
+    seekrecord,
+    index!,
+
+    # FASTQ
+    TypedFASTQ,
+    TypedFASTQRecord,
+    StringFASTQRecord,
+    DNAFASTQRecord,
+    RNAFASTQRecord,
+    AAFASTQRecord,
+    QualityScores,
 
     TypedFASTARecord,
     TypedFASTQRecord,

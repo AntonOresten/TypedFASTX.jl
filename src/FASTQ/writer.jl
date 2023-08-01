@@ -1,3 +1,8 @@
+"""
+    TypedFASTQ.Writer{T}
+
+A typed FASTQ writer. `T` is the type of the sequence.
+"""
 mutable struct Writer{T} <: AbstractWriter{T}
     path::String
     io::IO

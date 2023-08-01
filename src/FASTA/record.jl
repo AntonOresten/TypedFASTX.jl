@@ -1,3 +1,8 @@
+"""
+    TypedFASTA.Record{T}
+
+A typed FASTA record. `T` is the type of the sequence.
+"""
 struct Record{T} <: AbstractRecord{T}
     description::String
     sequence::T

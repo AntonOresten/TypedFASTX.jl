@@ -1,3 +1,8 @@
+"""
+    TypedFASTQ.Reader{T}
+
+A typed FASTQ reader. `T` is the type of the sequence.
+"""
 mutable struct Reader{T} <: AbstractReader{T}
     path::String
     reader::FASTX.FASTQ.Reader
