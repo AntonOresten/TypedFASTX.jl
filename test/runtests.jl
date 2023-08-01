@@ -6,12 +6,12 @@ using FASTX, BioSequences
 
 @testset "TypedFASTX.jl" begin
 
-    @testset "quality" begin
-        include("quality/quality.jl")
-    end
-
     include("record.jl")
-    include("conversion.jl")
     include("reader.jl")
     include("writer.jl")
+    include("quality/quality.jl")
+
+    include("FASTA/TypedFASTA.jl")
+    include("FASTQ/TypedFASTQ.jl")
+
 end

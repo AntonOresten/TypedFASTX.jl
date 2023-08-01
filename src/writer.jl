@@ -1,40 +1,49 @@
-const FASTXWriter = Union{FASTA.Writer, FASTQ.Writer}
+"""
+    AbstractWriter{T}
 
-mutable struct TypedWriter{T, Q <: AbstractQuality}
-    path::String
-    io::IO
-    position::Int
+Abstract type for typed FASTX writers. `T` is the type of the sequence in the records.
+"""
+abstract type AbstractWriter{T} end
 
-    function TypedWriter{T, Q}(io::IO) where {T, Q}
-        tw = new{T, Q}("no path", io, 1)
-        finalizer(close, tw)
-        tw
+"""
+    StringWriter
+
+Alias for `AbstractWriter{String}`. Can be used for constructing TypedFASTAWriter{String} and TypedFASTQWriter{String} instances.
+"""
+const StringWriter = AbstractWriter{String}
+
+"""
+    DNAWriter
+
+Alias for `AbstractWriter{LongDNA{4}}`. Can be used for constructing TypedFASTAWriter{LongDNA{4}} and TypedFASTQWriter{LongDNA{4}} instances.
+"""
+const DNAWriter = AbstractWriter{LongDNA{4}}
+
+"""
+    RNAWriter
+
+Alias for `AbstractWriter{LongRNA{4}}`. Can be used for constructing TypedFASTAWriter{LongRNA{4}} and TypedFASTQWriter{LongRNA{4}} instances.
+"""
+const RNAWriter = AbstractWriter{LongRNA{4}}
+
+"""
+    AAWriter
+
+Alias for `AbstractWriter{LongAA}`. Can be used for constructing TypedFASTAWriter{LongAA} and TypedFASTQWriter{LongAA} instances.
+"""
+const AAWriter = AbstractWriter{LongAA}
+
+"Constructor for AbstractWriter{T} that looks at the file extension of the given path."
+function AbstractWriter{T}(path::String; append::Bool=false) where T
+    _, ext = splitext(path)
+    ext = lowercase(ext)
+    if ext in [".fasta", "fa"]
+        return TypedFASTAWriter{T}(path, append=append)
+    elseif ext in [".fastq", ".fq"]
+        return TypedFASTQWriter{T}(path, append=append)
+    else
+        error("Unknown file extension $ext")
     end
-
-    function TypedWriter{T, Q}(path::String; append::Bool=false) where {T, Q <: AbstractQuality}
-        io = open(path, append ? "a" : "w")
-        tw = new{T, Q}(path, io, 1)
-        finalizer(close, tw)
-        tw
-    end
 end
 
-Base.close(tw::TypedWriter) = close(tw.io)
-
-# print is probably reeeaally sloow. TranscodingStream faster? or convert to FASTXRecord first?
-print_fasta(io::IO, record::TypedRecord{T, Q}) where {T, Q} = print(io, ">$(description(record))\n$(sequence(record))")
-print_fastq(io::IO, record::TypedRecord{T, QualityScores}) where T = print(io, "@$(description(record))\n$(sequence(record))\n+\n$(quality(record))")
-
-function Base.write(tw::TypedWriter{T, NoQuality}, record::TypedRecord{T, Q}) where {T, Q}
-    print_fasta(tw.io, record)
-    print(tw.io, '\n')
-    tw.position += 1
-    record
-end
-
-function Base.write(tw::TypedWriter{T, QualityScores}, record::TypedRecord{T, QualityScores}) where T
-    print_fastq(tw.io, record)
-    print(tw.io, '\n')
-    tw.position += 1
-    record
-end
+Base.close(w::AbstractWriter) = close(w.io)

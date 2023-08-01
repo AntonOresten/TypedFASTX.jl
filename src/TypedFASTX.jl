@@ -1,52 +1,88 @@
 module TypedFASTX
 
-    export
-        # probability.jl
-        error_prob_generator,
-        error_probs,
+export
+    # record.jl
+    AbstractRecord,
+    StringRecord,
+    DNARecord,
+    RNARecord,
+    AARecord,
+    description,
+    identifier,
+    sequence,
+    quality,
+    quality_values,
 
-        # quality.jl
-        AbstractQuality,
-        NoQuality,
-        NO_QUALITY,
+    # reader.jl
+    AbstractReader,
+    StringReader,
+    DNAReader,
+    RNAReader,
+    AAReader,
 
-        # qualityscores.jl
-        QualityScores,
+    # writer.jl
+    StringWriter,
+    DNAWriter,
+    RNAWriter,
+    AAWriter,
 
-        # record.jl
-        TypedRecord,
-        StringRecord,
-        DNARecord,
-        RNARecord,
-        AARecord,
+    # quality
+    error_prob_generator,
+    error_probs,
+    error_rate,
+    QualityScores,
 
-        description,
-        identifier,
-        sequence,
-        quality,
-        has_quality,
-        quality_values,
+    # FASTA
+    TypedFASTA,
+    TypedFASTARecord,
+    StringFASTARecord,
+    DNAFASTARecord,
+    RNAFASTARecord,
+    AAFASTARecord,
+    has_index,
+    seekrecord,
+    index!,
 
-        # reader.jl
-        TypedReader,
-        has_index,
-        seekrecord,
-        index!,
-        StringReader,
-        DNAReader,
-        RNAReader,
-        AAReader,
+    # FASTQ
+    TypedFASTQ,
+    TypedFASTQRecord,
+    StringFASTQRecord,
+    DNAFASTQRecord,
+    RNAFASTQRecord,
+    AAFASTQRecord,
+    QualityScores,
 
-        # writer.jl
-        TypedWriter
+    TypedFASTARecord,
+    TypedFASTQRecord,
 
-    using FASTX
-    using BioSequences
+    TypedFASTAReader,
+    TypedFASTQReader,
 
-    include("quality/quality.jl")
-    include("record.jl")
-    include("conversion.jl")
-    include("reader.jl")
-    include("writer.jl")
+    TypedFASTAWriter,
+    TypedFASTQWriter
+
+import FASTX
+import Statistics
+using BioSequences
+
+include("record.jl")
+include("reader.jl")
+include("writer.jl")
+include("quality/quality.jl")
+
+include("FASTA/TypedFASTA.jl")
+include("FASTQ/TypedFASTQ.jl")
+
+const TypedFASTARecord = TypedFASTA.Record
+const TypedFASTQRecord = TypedFASTQ.Record
+
+const TypedFASTAReader = TypedFASTA.Reader
+const TypedFASTQReader = TypedFASTQ.Reader
+
+const TypedFASTAWriter = TypedFASTA.Writer
+const TypedFASTQWriter = TypedFASTQ.Writer
+
+import .TypedFASTA: has_index
+import .TypedFASTQ: quality_values
 
 end
