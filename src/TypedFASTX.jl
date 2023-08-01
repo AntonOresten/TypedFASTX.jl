@@ -30,6 +30,7 @@ export
     error_prob_generator,
     error_probs,
     error_rate,
+    error_count,
     QualityScores,
 
     # FASTA

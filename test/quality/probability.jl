@@ -17,4 +17,7 @@
     qs3 = QualityScores(";;;;", SOLEXA)
     @test all(>(0.75), error_prob_generator(qs3))
 
+    @test error_rate(qs1) == 1.0
+    @test error_count(qs1) == 4.0
+
 end
