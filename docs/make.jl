@@ -19,5 +19,7 @@ makedocs(;
 deploydocs(;
     repo = "github.com/anton083/TypedFASTX.jl",
     push_preview = true,
-    branch = "gh-pages",
+    devbranch = "dev",
+    deps = nothing,
+    make = nothing
 )
