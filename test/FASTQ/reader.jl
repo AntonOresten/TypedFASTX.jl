@@ -18,8 +18,20 @@
         @test_throws ErrorException first_record in reader # even though it's in the file, 
 
         @test length(collect(reader)) == 3
-        reader = TypedFASTQ.Reader{LongDNA{4}}(fastq_file)
+        reader = DNAReader(fastq_file)
         @test length(take!(reader)) == 4
+        
+        reader = DNAReader(fastq_file)
+        @test length(collect(reader, max_error_rate=0.0)) == 0
+        
+        reader = DNAReader(fastq_file)
+        @test length(take!(reader, 0)) == 0
+
+        reader = DNAReader(fastq_file)
+        @test length(take!(reader, max_length = 0)) == 0
+
+        reader = DNAReader(fastq_file)
+        @test_logs (:warn,) @test length(take!(reader, 10)) == 4
     
         io = IOBuffer()
         Base.invokelatest(show, io, MIME("text/plain"), TypedFASTQ.Reader{LongDNA{4}}(fastq_file))

@@ -29,10 +29,6 @@ end=#
 Base.eltype(::Reader{T}) where T = Record{T}
 Base.eltype(::Type{Reader{T}}) where T = Record{T}
 
-function Base.summary(R::Type{Reader{T}}) where T
-    "$(R)"
-end
-
 function Base.show(io::IO, reader::Reader{T}) where T
     print(io, "$(summary(reader))($(repr(reader.path)))")
 end
