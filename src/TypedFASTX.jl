@@ -2,7 +2,7 @@ module TypedFASTX
 
 export
     # record.jl
-    AbstractRecord,
+    TypedRecord,
     StringRecord,
     DNARecord,
     RNARecord,

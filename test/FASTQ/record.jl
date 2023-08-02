@@ -20,7 +20,7 @@
         @test FASTX.FASTQ.Record("Rick", "ACGT", "!!!!") == convert(FASTX.FASTQ.Record, DNARecord("Rick", "ACGT", "!!!!"))
     end
 
-    @testset "AbstractRecord alias" begin
+    @testset "TypedRecord alias" begin
         @test DNARecord("Rick", "ACGT", "!!!!") == TypedFASTQRecord{LongDNA{4}}("Rick", "ACGT", "!!!!")
         @test DNARecord("Rick", "ACGT", "!!!!") == DNARecord("Rick", dna"ACGT", "!!!!")
         @test DNARecord("Rick", "ACGT", "!!!!") == DNARecord("Rick", rna"ACGU", "!!!!")

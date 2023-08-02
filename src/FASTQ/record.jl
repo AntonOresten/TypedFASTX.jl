@@ -3,7 +3,7 @@
 
 A FASTQ record with a typed sequence and quality scores.
 """
-struct Record{T} <: AbstractRecord{T}
+struct Record{T} <: TypedRecord{T}
     description::String
     sequence::T
     quality::QualityScores
@@ -15,7 +15,7 @@ struct Record{T} <: AbstractRecord{T}
         new{T}(name, T(sequence), qs)
     end
 
-    function AbstractRecord{T}(name::AbstractString, sequence::Any, quality::Any) where T
+    function TypedRecord{T}(name::AbstractString, sequence::Any, quality::Any) where T
         Record{T}(name, sequence, quality)
     end
 end

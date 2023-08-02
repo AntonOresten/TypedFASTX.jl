@@ -3,7 +3,7 @@
 
 A typed FASTA record. `T` is the type of the sequence.
 """
-struct Record{T} <: AbstractRecord{T}
+struct Record{T} <: TypedRecord{T}
     description::String
     sequence::T
 
@@ -12,15 +12,15 @@ struct Record{T} <: AbstractRecord{T}
         new{T}(name, T(sequence))
     end
 
-    # AbstractRecord{LongDNA{4}}("Ricky", "ACGT")
+    # TypedRecord{LongDNA{4}}("Ricky", "ACGT")
     # DNARecord("Ricky", "ACGT")
-    function AbstractRecord{T}(name::AbstractString, sequence::Any) where T
+    function TypedRecord{T}(name::AbstractString, sequence::Any) where T
         Record{T}(name, sequence)
     end
 end
 
 # TypedFASTQ.Record -> TypedFASTA.Record
-function Base.convert(::Type{Record{T}}, record::AbstractRecord{T}) where T
+function Base.convert(::Type{Record{T}}, record::TypedRecord{T}) where T
     Record{T}(description(record), sequence(record))
 end
 

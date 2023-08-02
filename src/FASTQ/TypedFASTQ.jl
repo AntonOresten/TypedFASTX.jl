@@ -1,7 +1,7 @@
 module TypedFASTQ
 
 import ..TypedFASTX:
-    AbstractRecord,
+    TypedRecord,
     description,
     identifier,
     sequence,

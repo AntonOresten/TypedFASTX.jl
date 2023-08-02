@@ -26,4 +26,4 @@ function Base.write(w::Writer{T}, record::Record{T}) where T
     record
 end
 
-Base.write(::TypedFASTQ.Writer{T}, ::AbstractRecord{T}) where T = error("Can't write a FASTA record to a FASTQ file.")
+Base.write(::TypedFASTQ.Writer{T}, ::TypedRecord{T}) where T = error("Can't write a FASTA record to a FASTQ file.")
