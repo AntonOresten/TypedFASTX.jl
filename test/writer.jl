@@ -24,6 +24,20 @@
 
         @test_throws ErrorException DNAWriter("invalid.ext")
 
+        @testset "do" begin
+            path = "temp.fasta"
+            open(DNAWriter(path)) do r
+                @test r isa TypedFASTA.Writer
+            end
+            rm(path)
+
+            path = "temp.fastq"
+            open(DNAWriter, path) do r
+                @test r isa TypedFASTQ.Writer
+            end
+            rm(path)
+        end
+
     end
 
 end

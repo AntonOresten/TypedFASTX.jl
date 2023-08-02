@@ -19,6 +19,19 @@
         end
 
         @test_throws ErrorException AbstractReader{LongDNA{4}}("invalid.ext")
+
+        @testset "do" begin
+            path = "data/seqs.fasta"
+
+            open(DNAReader(path)) do r
+                @test r isa DNAReader
+            end
+
+            open(DNAReader, path) do r
+                @test r isa DNAReader
+            end
+        end
+
     end
 
 end
