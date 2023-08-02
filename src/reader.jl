@@ -47,3 +47,20 @@ function AbstractReader{T}(path::String) where T
 end
 
 Base.close(r::AbstractReader) = close(r.reader)
+
+function Base.open(f::Function, reader::AbstractReader)
+    try
+        f(reader)
+    finally
+        close(reader)
+    end
+end
+
+function Base.open(f::Function, R::Type{<:AbstractReader}, path::String)
+    reader = R(path)
+    try
+        f(reader)
+    finally
+        close(reader)
+    end
+end

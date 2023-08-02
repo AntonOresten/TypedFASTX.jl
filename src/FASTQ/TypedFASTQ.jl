@@ -10,7 +10,8 @@ import ..TypedFASTX:
     QualityScores,
     error_prob_generator,
     error_probs,
-    error_rate
+    error_rate,
+    error_count
 
 import FASTX
 using BioSequences
