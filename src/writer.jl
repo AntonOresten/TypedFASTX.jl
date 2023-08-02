@@ -47,3 +47,20 @@ function AbstractWriter{T}(path::String; append::Bool=false) where T
 end
 
 Base.close(w::AbstractWriter) = close(w.io)
+
+function Base.close(f::Function, writer::AbstractWriter)
+    try
+        f(writer)
+    finally
+        close(writer)
+    end
+end
+
+function Base.close(f::Function, W::Type{<:AbstractWriter}, path::String)
+    writer = W(path)
+    try
+        f(writer)
+    finally
+        close(writer)
+    end
+end
