@@ -48,7 +48,7 @@ end
 
 Base.close(r::AbstractReader) = close(r.reader)
 
-function Base.open(f::Function, reader::AbstractWriter)
+function Base.open(f::Function, reader::AbstractReader)
     try
         f(reader)
     finally

@@ -48,7 +48,7 @@ end
 
 Base.close(w::AbstractWriter) = close(w.io)
 
-function Base.close(f::Function, writer::AbstractWriter)
+function Base.open(f::Function, writer::AbstractWriter)
     try
         f(writer)
     finally
@@ -56,7 +56,7 @@ function Base.close(f::Function, writer::AbstractWriter)
     end
 end
 
-function Base.close(f::Function, W::Type{<:AbstractWriter}, path::String)
+function Base.open(f::Function, W::Type{<:AbstractWriter}, path::String)
     writer = W(path)
     try
         f(writer)
