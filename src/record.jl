@@ -57,7 +57,7 @@ Get the identifier of `record`. The identifier is the first "word" of the descri
 
 Returns the sequence of `record`.
 """
-@inline sequence(record::TypedRecord{T}) where T= record.sequence
+@inline sequence(record::TypedRecord{T}) where T = record.sequence
 
 
 """

@@ -3,7 +3,7 @@
 
 A typed FASTQ reader. `T` is the type of the sequence.
 """
-mutable struct Reader{T} <: AbstractReader{T}
+mutable struct Reader{T} <: TypedReader{T}
     path::String
     reader::FASTX.FASTQ.Reader
     position::Int
@@ -28,6 +28,10 @@ end=#
 
 Base.eltype(::Reader{T}) where T = Record{T}
 Base.eltype(::Type{Reader{T}}) where T = Record{T}
+
+function Base.summary(::Reader{T}) where T
+    "TypedFASTQ.Reader{$(T)}"
+end
 
 function Base.show(io::IO, reader::Reader{T}) where T
     print(io, "$(summary(reader))($(repr(reader.path)))")
@@ -69,37 +73,31 @@ end
     error_rate(record) < max_error_rate
 end
 
-function Base.collect(reader::Reader{T};
-    min_length::Int = 0, max_length::Int = typemax(Int), max_error_rate::Float64 = 1.0
-) where T
-    records = collect(eltype(reader), reader.reader)
-    filter_func = isone(max_error_rate) ?
-        (r -> check_length(r, min_length, max_length)) :
-        (r -> check_length(r, min_length, max_length) && check_error_rate(r, max_error_rate))
-    filter!(filter_func, records)
-end
-
 # take n records from a Reader
-function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
+function Base.take!(reader::Reader{T}, N::Int = typemax(Int);
     min_length::Int = 0, max_length::Int = typemax(Int), max_error_rate::Float64 = 1.0
 ) where T
     records = Vector{Record{T}}()
-    if n < 1
+    if N < 1
         return records
     end
     i = 0
+    # TODO: if min and max length are 0 and typemax(Int) respectively -> don't check length
+    filter_func = isone(max_error_rate) ?
+        r -> check_length(r, min_length, max_length) :
+        r -> check_length(r, min_length, max_length) && check_error_rate(r, max_error_rate)
     for record in reader
-        if !(check_length(record, min_length, max_length) && check_error_rate(record, max_error_rate))
+        if !filter_func(record)
             continue
         end
         push!(records, record)
         i += 1
-        if i >= n
+        if i >= N
             break
         end
     end
-    if i < n && n != typemax(Int)
-        @warn "Reached end of file before taking $n records. $(length(records)) records taken from \"$(reader.path)\"."
+    if i < N && N != typemax(Int)
+        @warn "Reached end of file before taking $N records. $(length(records)) records taken from \"$(reader.path)\"."
     end
     records
 end

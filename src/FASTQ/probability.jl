@@ -24,4 +24,4 @@ error_rate(record::Record) = error_rate(record.quality)
 
 Returns the expected amount of errors in the sequence of a FASTQ record.
 """
-error_count(record::TypedFASTQ.Record{T}) where T = sum(error_prob_generator(record))
+error_count(record::TypedFASTQ.Record{T}) where T = sum(error_prob_generator(record.quality))

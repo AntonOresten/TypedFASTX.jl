@@ -1,6 +1,6 @@
 @testset "writer.jl" begin
 
-    @testset "AbstractWriter" begin
+    @testset "TypedWriter" begin
         
         @testset "FASTA" begin
             path = "temp.fasta"

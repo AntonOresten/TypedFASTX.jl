@@ -1,6 +1,6 @@
 @testset "reader.jl" begin
 
-    @testset "AbstractReader" begin
+    @testset "TypedReader" begin
         
         @testset "FASTA" begin
             path = "data/seqs.fasta"
@@ -18,7 +18,7 @@
             close(r)
         end
 
-        @test_throws ErrorException AbstractReader{LongDNA{4}}("invalid.ext")
+        @test_throws ErrorException TypedReader{LongDNA{4}}("invalid.ext")
 
         @testset "do" begin
             path = "data/seqs.fasta"

@@ -1,3 +1,5 @@
+const EMPTY_DESCRIPTION = ""
+
 """
     TypedFASTA.Record{T}
 
@@ -7,15 +9,25 @@ struct Record{T} <: TypedRecord{T}
     description::String
     sequence::T
 
+    # TypedFASTA.Record("Ricky", dna"ACGT")
+    function Record{T}(description::String, sequence::T) where T
+        new{T}(description, sequence)
+    end
+
+    function TypedRecord{T}(sequence::T) where T
+        new{T}(EMPTY_DESCRIPTION, sequence)
+    end
+
+    # TypedFASTA.Record{LongDNA{4}}("Ricky", dna"ACGT")
     # TypedFASTA.Record{LongDNA{4}}("Ricky", "ACGT")
-    function Record{T}(name::AbstractString, sequence::Any) where T
-        new{T}(name, T(sequence))
+    function Record{T}(description::AbstractString, sequence::Any) where T
+        new{T}(description, T(sequence))
     end
 
     # TypedRecord{LongDNA{4}}("Ricky", "ACGT")
     # DNARecord("Ricky", "ACGT")
-    function TypedRecord{T}(name::AbstractString, sequence::Any) where T
-        Record{T}(name, sequence)
+    function TypedRecord{T}(description::AbstractString, sequence::Any) where T
+        Record{T}(description, T(sequence))
     end
 end
 
@@ -41,6 +53,10 @@ end
 function BioSequences.reverse_complement!(record::Record{T}) where T <: Union{LongDNA, LongRNA}
     reverse_complement!(record.sequence)
     record
+end
+
+function Base.summary(::Record{T}) where T
+    "TypedFASTA.Record{$(T)}"
 end
 
 function Base.show(io::IO, record::Record{T}) where T

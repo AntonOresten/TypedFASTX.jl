@@ -5,8 +5,8 @@ import ..TypedFASTX:
     description,
     identifier,
     sequence,
-    AbstractReader,
-    AbstractWriter
+    TypedReader,
+    TypedWriter
 
 import FASTX
 using BioSequences

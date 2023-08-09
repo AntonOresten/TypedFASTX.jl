@@ -68,14 +68,14 @@
 
     @testset "show" begin
 
-        summary(TypedFASTA.Reader{LongDNA{4}}(fasta_file)) == "TypedFASTX.TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}"
+        @test summary(TypedFASTA.Reader{LongDNA{4}}(fasta_file)) == "TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}"
 
         @testset "compact" begin
             reader = TypedFASTA.Reader{LongDNA{4}}(fasta_file)
             io = IOBuffer()
             @test isnothing(show(io, reader))
             str = String(take!(io))
-            @test str == "TypedFASTX.TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}(\"data/seqs.fasta\")"
+            @test str == "TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}(\"data/seqs.fasta\")"
         end
 
         @testset "long" begin
@@ -83,7 +83,7 @@
             io = IOBuffer()
             Base.invokelatest(show, io, MIME("text/plain"), reader)
             str = String(take!(io))
-            @test str == "TypedFASTX.TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}:\n  path: \"data/seqs.fasta\"\n  position: 1" 
+            @test str == "TypedFASTA.Reader{LongSequence{DNAAlphabet{4}}}:\n  path: \"data/seqs.fasta\"\n  position: 1" 
         end
 
     end

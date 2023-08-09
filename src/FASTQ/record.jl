@@ -8,15 +8,18 @@ struct Record{T} <: TypedRecord{T}
     sequence::T
     quality::QualityScores
 
-    function Record{T}(name::AbstractString, sequence::Any, quality::Any) where T
-        qs = QualityScores(quality)
+    function Record{T}(description::AbstractString, sequence::T, qs::QualityScores) where T
         seq_len, qs_len = length(sequence), length(qs)
-        @assert seq_len == qs_len "$(Record{T}) \"$name\": sequence length ($seq_len) does not match quality length ($qs_len)."
-        new{T}(name, T(sequence), qs)
+        @assert seq_len == qs_len "$(Record{T}) \"$description\": sequence length ($seq_len) does not match quality length ($qs_len)."
+        new{T}(description, T(sequence), qs)
     end
 
-    function TypedRecord{T}(name::AbstractString, sequence::Any, quality::Any) where T
-        Record{T}(name, sequence, quality)
+    function Record{T}(description::AbstractString, sequence::Any, quality::Any) where T
+        Record{T}(description, T(sequence), QualityScores(quality))
+    end
+
+    function TypedRecord{T}(description::AbstractString, sequence::Any, quality::Any) where T
+        Record{T}(description, sequence, quality)
     end
 end
 
@@ -51,6 +54,10 @@ function BioSequences.reverse_complement!(record::Record{T}) where T <: Union{Lo
     reverse_complement!(record.sequence)
     reverse!(record.quality)
     record
+end
+
+function Base.summary(::Record{T}) where T
+    "TypedFASTQ.Record{$(T)}"
 end
 
 function Base.show(io::IO, record::Record{T}) where T

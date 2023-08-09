@@ -3,7 +3,7 @@
 
 A typed FASTQ writer. `T` is the type of the sequence.
 """
-mutable struct Writer{T} <: AbstractWriter{T}
+mutable struct Writer{T} <: TypedWriter{T}
     path::String
     io::IO
     position::Int

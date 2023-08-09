@@ -53,12 +53,12 @@
     end
     
     @testset "show" begin
-        @test sprint(show, DNARecord("Ricky", "ACGT", "!!!!")) == "TypedFASTX.TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}(\"Ricky\", \"ACGT\", \"!!!!\")"
+        @test sprint(show, DNARecord("Ricky", "ACGT", "!!!!")) == "TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}(\"Ricky\", \"ACGT\", \"!!!!\")"
     
         io = IOBuffer()
         Base.invokelatest(show, io, MIME("text/plain"), DNARecord("Ricky", "ACGT", "!!!!"))
         str = String(take!(io))
-        @test str == "TypedFASTX.TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}:\n description: \"Ricky\"\n    sequence: \"ACGT\"\n     quality: \"!!!!\""    
+        @test str == "TypedFASTQ.Record{LongSequence{DNAAlphabet{4}}}:\n description: \"Ricky\"\n    sequence: \"ACGT\"\n     quality: \"!!!!\""    
     end
     
 end
