@@ -23,7 +23,7 @@ You can install TypedFASTX from the Julia REPL. Type `]` to enter the Pkg REPL m
 
 ## Example usage
 
-```julia
+```jldoctest
 julia> using TypedFASTX, FASTX, BioSequences
 
 julia> ricky = AARecord("Ricky Smith", "SMITH")
