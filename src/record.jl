@@ -69,10 +69,6 @@ Returns the sequence of `record`, converted to type T.
 # case when conversion isn't necessary
 @inline sequence(::Type{T}, record::TypedRecord{T}) where T = record.sequence
 
-function Base.summary(R::TypedRecord)
-    string(typeof(R))
-end
-
 
 function Base.convert(::Type{FASTX.FASTA.Record}, record::TypedRecord{T}) where T
     FASTX.FASTA.Record(

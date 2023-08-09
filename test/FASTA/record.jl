@@ -9,6 +9,8 @@
         @test sequence(record) isa LongDNA{4}
         @test sequence(LongDNA{4}, record) === sequence(record)
         @test sequence(String, record) == "GATTACA"
+
+        @test DNARecord("GATTACA") == DNARecord("", "GATTACA")
     end
 
     @testset "Conversion" begin

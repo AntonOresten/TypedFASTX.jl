@@ -14,8 +14,8 @@ struct Record{T} <: TypedRecord{T}
         new{T}(description, sequence)
     end
 
-    function TypedRecord{T}(sequence::T) where T
-        new{T}(EMPTY_DESCRIPTION, sequence)
+    function TypedRecord{T}(sequence::Any) where T
+        new{T}(EMPTY_DESCRIPTION, T(sequence))
     end
 
     # TypedFASTA.Record{LongDNA{4}}("Ricky", dna"ACGT")
