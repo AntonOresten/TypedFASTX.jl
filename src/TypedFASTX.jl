@@ -2,11 +2,12 @@ module TypedFASTX
 
 export
     # record.jl
-    AbstractRecord,
+    TypedRecord,
     StringRecord,
     DNARecord,
     RNARecord,
     AARecord,
+
     description,
     identifier,
     sequence,
@@ -14,13 +15,14 @@ export
     quality_values,
 
     # reader.jl
-    AbstractReader,
+    TypedReader,
     StringReader,
     DNAReader,
     RNAReader,
     AAReader,
 
     # writer.jl
+    TypedWriter,
     StringWriter,
     DNAWriter,
     RNAWriter,
@@ -36,30 +38,21 @@ export
     # FASTA
     TypedFASTA,
     TypedFASTARecord,
-    StringFASTARecord,
-    DNAFASTARecord,
-    RNAFASTARecord,
-    AAFASTARecord,
     has_index,
     seekrecord,
     index!,
 
+    TypedFASTARecord,
+    TypedFASTAReader,
+    TypedFASTAWriter,
+
     # FASTQ
     TypedFASTQ,
     TypedFASTQRecord,
-    StringFASTQRecord,
-    DNAFASTQRecord,
-    RNAFASTQRecord,
-    AAFASTQRecord,
     QualityScores,
 
-    TypedFASTARecord,
     TypedFASTQRecord,
-
-    TypedFASTAReader,
     TypedFASTQReader,
-
-    TypedFASTAWriter,
     TypedFASTQWriter
 
 import FASTX
@@ -75,12 +68,11 @@ include("FASTA/TypedFASTA.jl")
 include("FASTQ/TypedFASTQ.jl")
 
 const TypedFASTARecord = TypedFASTA.Record
-const TypedFASTQRecord = TypedFASTQ.Record
-
 const TypedFASTAReader = TypedFASTA.Reader
-const TypedFASTQReader = TypedFASTQ.Reader
-
 const TypedFASTAWriter = TypedFASTA.Writer
+
+const TypedFASTQRecord = TypedFASTQ.Record
+const TypedFASTQReader = TypedFASTQ.Reader
 const TypedFASTQWriter = TypedFASTQ.Writer
 
 import .TypedFASTA: has_index

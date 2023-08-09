@@ -3,7 +3,7 @@
 
 A typed FASTA reader. `T` is the type of the sequence.
 """
-mutable struct Reader{T} <: AbstractReader{T}
+mutable struct Reader{T} <: TypedReader{T}
     path::String
     reader::FASTX.FASTA.Reader
     position::Int
@@ -22,6 +22,10 @@ end
 
 Base.eltype(::Reader{T}) where T = Record{T}
 Base.eltype(::Type{Reader{T}}) where T = Record{T}
+
+function Base.summary(::Reader{T}) where T
+    "TypedFASTA.Reader{$(T)}"
+end
 
 function Base.show(io::IO, reader::Reader{T}) where T
     print(io, "$(summary(reader))($(repr(reader.path)))")
@@ -112,19 +116,12 @@ end
     min_length <= length(record) <= max_length
 end
 
-function Base.collect(reader::Reader{T};
-    min_length::Int = 0, max_length::Int = typemax(Int)
-) where T
-    records = collect(eltype(reader), reader.reader)
-    filter!(r -> min_length <= length(r) <= max_length, records)
-end
-
 # take n records from a Reader
-function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
+function Base.take!(reader::Reader{T}, N::Int = typemax(Int);
     min_length::Int = 0, max_length::Int = typemax(Int)
 ) where T
     records = Vector{Record{T}}()
-    if n < 1
+    if N < 1
         return records
     end
     i = 0
@@ -134,12 +131,12 @@ function Base.take!(reader::Reader{T}, n::Int = typemax(Int);
         end
         push!(records, record)
         i += 1
-        if i >= n
+        if i >= N
             break
         end
     end
-    if i < n && n != typemax(Int)
-        @warn "Reached end of file before taking $n records. $(length(records)) records taken from \"$(reader.path)\"."
+    if i < N && N != typemax(Int)
+        @warn "Reached end of file before taking $N records. $(length(records)) records taken from \"$(reader.path)\"."
     end
     records
 end

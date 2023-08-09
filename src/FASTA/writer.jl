@@ -3,7 +3,7 @@
 
 A typed FASTA writer. `T` is the type of the sequence.
 """
-mutable struct Writer{T} <: AbstractWriter{T}
+mutable struct Writer{T} <: TypedWriter{T}
     path::String
     io::IO
     position::Int
@@ -26,4 +26,4 @@ function Base.write(w::Writer{T}, record::Record{T}) where T
     record
 end
 
-Base.write(w::Writer{T}, record::AbstractRecord{T}) where T = write(w, convert(Record{T}, record))
+Base.write(w::Writer{T}, record::TypedRecord{T}) where T = write(w, convert(Record{T}, record))

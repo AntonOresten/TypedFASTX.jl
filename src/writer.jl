@@ -1,40 +1,42 @@
 """
-    AbstractWriter{T}
+    TypedWriter{T}
 
 Abstract type for typed FASTX writers. `T` is the type of the sequence in the records.
 """
-abstract type AbstractWriter{T} end
+abstract type TypedWriter{T} end
 
 """
     StringWriter
 
-Alias for `AbstractWriter{String}`. Can be used for constructing TypedFASTAWriter{String} and TypedFASTQWriter{String} instances.
+Alias for `TypedWriter{String}`. Can be used for constructing TypedFASTAWriter{String} and TypedFASTQWriter{String} instances.
 """
-const StringWriter = AbstractWriter{String}
+const StringWriter = TypedWriter{String}
 
 """
     DNAWriter
 
-Alias for `AbstractWriter{LongDNA{4}}`. Can be used for constructing TypedFASTAWriter{LongDNA{4}} and TypedFASTQWriter{LongDNA{4}} instances.
+Alias for `TypedWriter{LongDNA{4}}`. Can be used for constructing TypedFASTAWriter{LongDNA{4}} and TypedFASTQWriter{LongDNA{4}} instances.
 """
-const DNAWriter = AbstractWriter{LongDNA{4}}
+const DNAWriter = TypedWriter{LongDNA{4}}
 
 """
     RNAWriter
 
-Alias for `AbstractWriter{LongRNA{4}}`. Can be used for constructing TypedFASTAWriter{LongRNA{4}} and TypedFASTQWriter{LongRNA{4}} instances.
+Alias for `TypedWriter{LongRNA{4}}`. Can be used for constructing TypedFASTAWriter{LongRNA{4}} and TypedFASTQWriter{LongRNA{4}} instances.
 """
-const RNAWriter = AbstractWriter{LongRNA{4}}
+const RNAWriter = TypedWriter{LongRNA{4}}
 
 """
     AAWriter
 
-Alias for `AbstractWriter{LongAA}`. Can be used for constructing TypedFASTAWriter{LongAA} and TypedFASTQWriter{LongAA} instances.
+Alias for `TypedWriter{LongAA}`. Can be used for constructing TypedFASTAWriter{LongAA} and TypedFASTQWriter{LongAA} instances.
 """
-const AAWriter = AbstractWriter{LongAA}
+const AAWriter = TypedWriter{LongAA}
 
-"Constructor for AbstractWriter{T} that looks at the file extension of the given path."
-function AbstractWriter{T}(path::String; append::Bool=false) where T
+"""
+Constructor for TypedWriter{T} that looks at the file extension of the given path
+to decide writer type."""
+function TypedWriter{T}(path::String; append::Bool=false) where T
     _, ext = splitext(path)
     ext = lowercase(ext)
     if ext in [".fasta", "fa"]
@@ -46,9 +48,9 @@ function AbstractWriter{T}(path::String; append::Bool=false) where T
     end
 end
 
-Base.close(w::AbstractWriter) = close(w.io)
+Base.close(w::TypedWriter) = close(w.io)
 
-function Base.open(f::Function, writer::AbstractWriter)
+function Base.open(f::Function, writer::TypedWriter)
     try
         f(writer)
     finally
@@ -56,7 +58,7 @@ function Base.open(f::Function, writer::AbstractWriter)
     end
 end
 
-function Base.open(f::Function, W::Type{<:AbstractWriter}, path::String)
+function Base.open(f::Function, W::Type{<:TypedWriter}, path::String)
     writer = W(path)
     try
         f(writer)

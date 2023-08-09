@@ -1,12 +1,12 @@
 module TypedFASTQ
 
 import ..TypedFASTX:
-    AbstractRecord,
+    TypedRecord,
     description,
     identifier,
     sequence,
-    AbstractReader,
-    AbstractWriter,
+    TypedReader,
+    TypedWriter,
     QualityScores,
     error_prob_generator,
     error_probs,
