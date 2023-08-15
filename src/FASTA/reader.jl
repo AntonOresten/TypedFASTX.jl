@@ -23,16 +23,12 @@ end
 Base.eltype(::Reader{T}) where T = Record{T}
 Base.eltype(::Type{Reader{T}}) where T = Record{T}
 
-function Base.summary(::Reader{T}) where T
-    "TypedFASTA.Reader{$(T)}"
-end
-
 function Base.show(io::IO, reader::Reader{T}) where T
     print(io, "$(summary(reader))($(repr(reader.path)))")
 end
 
 function Base.show(io::IO, ::MIME"text/plain", reader::Reader{T}) where T
-    print(io, summary(reader), ':')
+    print(io, summary(reader), " (FASTA format):")
     print(io, "\n  path: ", repr(reader.path))
     print(io, "\n  position: ", reader.position)
 end

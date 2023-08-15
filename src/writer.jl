@@ -33,6 +33,10 @@ Alias for `TypedWriter{LongAA}`. Can be used for constructing TypedFASTAWriter{L
 """
 const AAWriter = TypedWriter{LongAA}
 
+function Base.summary(::TypedWriter{T}) where T
+    string(TypedWriter{T})
+end
+
 """
 Constructor for TypedWriter{T} that looks at the file extension of the given path
 to decide writer type."""

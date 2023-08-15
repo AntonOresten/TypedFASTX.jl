@@ -33,6 +33,10 @@ Alias for `TypedReader{LongAA}`. Can be used for constructing TypedFASTAReader{L
 """
 const AAReader = TypedReader{LongAA}
 
+function Base.summary(::TypedReader{T}) where T
+    string(TypedReader{T})
+end
+
 "Constructor for TypedReader{T} that looks at the file extension of the given path
 to decide reader type."
 function TypedReader{T}(path::String) where T

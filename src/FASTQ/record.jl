@@ -56,10 +56,6 @@ function BioSequences.reverse_complement!(record::Record{T}) where T <: Union{Lo
     record
 end
 
-function Base.summary(::Record{T}) where T
-    "TypedFASTQ.Record{$(T)}"
-end
-
 function Base.show(io::IO, record::Record{T}) where T
     print(io,
         summary(record), '(',

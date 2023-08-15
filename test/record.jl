@@ -31,4 +31,5 @@
         @test FASTX.FASTA.Record("Rick", "ACGT") == convert(FASTX.FASTA.Record, DNARecord("Rick", "ACGT"))
         @test FASTX.FASTA.Record("Rick", "ACGT") == convert(FASTX.FASTA.Record, DNARecord("Rick", "ACGT", "!!!!"))
     end
+
 end

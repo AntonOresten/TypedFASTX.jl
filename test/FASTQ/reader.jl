@@ -32,33 +32,12 @@
 
         reader = DNAReader(fastq_file)
         @test_logs (:warn,) @test length(take!(reader, 10)) == 4
-    
-        io = IOBuffer()
-        Base.invokelatest(show, io, MIME("text/plain"), TypedFASTQ.Reader{LongDNA{4}}(fastq_file))
-        str = String(take!(io))
-        @test str == "TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}:\n  path: \"data/seqs.fastq\"\n  position: 1"
     end
 
     @testset "show" begin
-
-        @test summary(TypedFASTQ.Reader{LongDNA{4}}(fastq_file)) == "TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}"
-
-        @testset "compact" begin
-            reader = TypedFASTQ.Reader{LongDNA{4}}(fastq_file)
-            io = IOBuffer()
-            @test isnothing(show(io, reader))
-            str = String(take!(io))
-            @test str == "TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}(\"data/seqs.fastq\")"
-        end
-
-        @testset "long" begin
-            reader = TypedFASTQ.Reader{LongDNA{4}}(fastq_file)
-            io = IOBuffer()
-            Base.invokelatest(show, io, MIME("text/plain"), reader)
-            str = String(take!(io))
-            @test str == "TypedFASTQ.Reader{LongSequence{DNAAlphabet{4}}}:\n  path: \"data/seqs.fastq\"\n  position: 1" 
-        end
-
+        @test summary(TypedFASTQ.Reader{LongDNA{4}}(fastq_file)) == "DNAReader"
+        @test repr(DNAReader(fastq_file)) == "DNAReader(\"data/seqs.fastq\")"
+        @test repr("text/plain", DNAReader(fastq_file)) == "DNAReader (FASTQ format):\n  path: \"data/seqs.fastq\"\n  position: 1"
     end
 
 end
