@@ -15,7 +15,7 @@
         w = TypedFASTQ.Writer{String}(path)
 
         @test repr(w) == "StringWriter(\"temp.fastq\")"
-        @test repr("text/plain", w) == "StringWriter (FASTQ format):\n  path: \"temp.fastq\"\n  position: 1"
+        @test repr("text/plain", w) == "StringWriter (FASTQ):\n  path: \"temp.fastq\"\n  position: 1"
 
         @test w.path == path
         @test w.io isa IOStream

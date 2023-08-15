@@ -34,7 +34,7 @@ function Base.show(io::IO, writer::Writer{T}) where T
 end
 
 function Base.show(io::IO, ::MIME"text/plain", writer::Writer{T}) where T
-    print(io, summary(writer), " (FASTQ format):")
+    print(io, summary(writer), " (FASTQ):")
     print(io, "\n  path: ", repr(writer.path))
     print(io, "\n  position: ", writer.position)
 end

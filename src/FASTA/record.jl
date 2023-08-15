@@ -65,7 +65,7 @@ function Base.show(io::IO, record::Record{T}) where T
 end
 
 function Base.show(io::IO, ::MIME"text/plain", record::Record{T}) where T
-    print(io, summary(record), ':')
+    print(io, summary(record), " (FASTA):")
     print(io, "\n description: ", isempty(description(record)) ? "<empty>" : repr(description(record)))
     print(io, "\n    sequence: ", repr(FASTX.truncate(String(sequence(record)), 40)))
 end

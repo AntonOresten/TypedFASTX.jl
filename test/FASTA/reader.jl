@@ -69,7 +69,7 @@
     @testset "show" begin
         @test summary(TypedFASTA.Reader{LongDNA{4}}(fasta_file)) == "DNAReader"
         @test repr(DNAReader(fasta_file)) == "DNAReader(\"data/seqs.fasta\")"
-        @test repr("text/plain", DNAReader(fasta_file)) == "DNAReader (FASTA format):\n  path: \"data/seqs.fasta\"\n  position: 1" 
+        @test repr("text/plain", DNAReader(fasta_file)) == "DNAReader (FASTA):\n  path: \"data/seqs.fasta\"\n  position: 1" 
     end
 
 end

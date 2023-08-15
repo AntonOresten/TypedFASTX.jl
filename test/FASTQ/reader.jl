@@ -37,7 +37,7 @@
     @testset "show" begin
         @test summary(TypedFASTQ.Reader{LongDNA{4}}(fastq_file)) == "DNAReader"
         @test repr(DNAReader(fastq_file)) == "DNAReader(\"data/seqs.fastq\")"
-        @test repr("text/plain", DNAReader(fastq_file)) == "DNAReader (FASTQ format):\n  path: \"data/seqs.fastq\"\n  position: 1"
+        @test repr("text/plain", DNAReader(fastq_file)) == "DNAReader (FASTQ):\n  path: \"data/seqs.fastq\"\n  position: 1"
     end
 
 end

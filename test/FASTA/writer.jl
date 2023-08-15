@@ -15,7 +15,7 @@
         w = TypedFASTA.Writer{String}(path)
 
         @test repr(w) == "StringWriter(\"temp.fasta\")"
-        @test repr("text/plain", w) == "StringWriter (FASTA format):\n  path: \"temp.fasta\"\n  position: 1"
+        @test repr("text/plain", w) == "StringWriter (FASTA):\n  path: \"temp.fasta\"\n  position: 1"
 
         @test w.path == path
         @test w.io isa IOStream

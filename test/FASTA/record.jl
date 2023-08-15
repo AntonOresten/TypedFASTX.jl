@@ -48,7 +48,7 @@
     
     @testset "show" begin
         @test repr(DNARecord("Ricky", "ACGT")) == "DNARecord(\"Ricky\", \"ACGT\")"
-        @test repr("text/plain", DNARecord("Ricky", "ACGT")) == "DNARecord:\n description: \"Ricky\"\n    sequence: \"ACGT\""  
+        @test repr("text/plain", DNARecord("Ricky", "ACGT")) == "DNARecord (FASTA):\n description: \"Ricky\"\n    sequence: \"ACGT\""  
     end
 
 end

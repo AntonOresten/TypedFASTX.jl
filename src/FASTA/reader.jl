@@ -28,7 +28,7 @@ function Base.show(io::IO, reader::Reader{T}) where T
 end
 
 function Base.show(io::IO, ::MIME"text/plain", reader::Reader{T}) where T
-    print(io, summary(reader), " (FASTA format):")
+    print(io, summary(reader), " (FASTA):")
     print(io, "\n  path: ", repr(reader.path))
     print(io, "\n  position: ", reader.position)
 end
