@@ -26,4 +26,15 @@ function Base.write(w::Writer{T}, record::Record{T}) where T
     record
 end
 
-Base.write(::TypedFASTQ.Writer{T}, ::TypedRecord{T}) where T = error("Can't write a FASTA record to a FASTQ file.")
+Base.write(::TypedFASTQ.Writer{T}, ::TypedRecord{T}) where T = error("Can't write a FASTA record to a FASTQ file.")'
+
+
+function Base.show(io::IO, writer::Writer{T}) where T
+    print(io, "$(summary(writer))($(repr(writer.path)))")
+end
+
+function Base.show(io::IO, ::MIME"text/plain", writer::Writer{T}) where T
+    print(io, summary(writer), " (FASTQ):")
+    print(io, "\n  path: ", repr(writer.path))
+    print(io, "\n  position: ", writer.position)
+end
