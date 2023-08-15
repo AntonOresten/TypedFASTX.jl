@@ -27,7 +27,7 @@ You can install TypedFASTX from the Julia REPL. Type `]` to enter the Pkg REPL m
 julia> using TypedFASTX
 
 julia> mickey = DNARecord("Mickey Smith", "GATTACA", "quA1!Ty") # quality is optional
-DNARecord:
+DNARecord (FASTQ):
  description: "Mickey Smith"
     sequence: "GATTACA"
      quality: "quA1!Ty"
@@ -48,17 +48,14 @@ julia> description(mickey)
 julia> identifier(mickey)
 "Mickey"
 
-julia> using BioSequences
-
-julia> ricky = TypedRecord{LongAA}("Ricky Smith", "SMITH")
-AARecord:
+julia> ricky = LongAA("Ricky Smith", "SMITH")
+AARecord (FASTA):
  description: "Ricky Smith"
     sequence: "SMITH"
 
 julia> sequence(ricky)
 5aa Amino Acid Sequence:
 SMITH
-
 ```
 
 Check out the documentation for more detailed information on how to use the package.
