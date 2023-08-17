@@ -12,6 +12,7 @@
         @test quality_values(record) == Int8[0, 0, 0, 0]
         @test quality(record) == quality(TypedFASTQRecord{LongDNA{4}}("Ricky the Record", "ACGT", QualityScores("!!!!", FASTQ.SANGER_QUAL_ENCODING)))
         @test quality_values(record) == quality_values(TypedFASTQRecord{LongDNA{4}}("Ricky the Record", "ACGT", QualityScores("@@@@", FASTQ.SOLEXA_QUAL_ENCODING)))
+        @test record[1:2] == TypedFASTQRecord{LongDNA{4}}("Ricky the Record", "AC", "!!")
     end
 
     @testset "Conversion" begin

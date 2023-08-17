@@ -27,6 +27,7 @@ Base.:(==)(qs1::QualityScores, qs2::QualityScores) = hash(qs1) == hash(qs2)
 
 Base.length(qs::QualityScores) = length(qs.values)
 Base.getindex(qs::QualityScores, i::Integer) = qs.values[i]
+Base.getindex(qs::QualityScores, r::UnitRange{<:Integer}) = QualityScores(qs.values[r])
 
 encode_quality(qs::QualityScores) = qs.values .+ qs.encoding.offset
 Base.String(qs::QualityScores) = String(UInt8.(encode_quality(qs)))

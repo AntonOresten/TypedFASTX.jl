@@ -9,6 +9,7 @@
         @test sequence(record) isa LongDNA{4}
         @test sequence(LongDNA{4}, record) === sequence(record)
         @test sequence(String, record) == "GATTACA"
+        @test record[1:2] == TypedFASTARecord{LongDNA{4}}("Ricky the Record", "GA")
 
         @test DNARecord("GATTACA") == DNARecord("", "GATTACA")
     end

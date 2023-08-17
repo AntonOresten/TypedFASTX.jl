@@ -40,6 +40,7 @@ end
 
 Base.hash(r::Record, h::UInt) = hash(r.description, hash(r.sequence, hash(r.quality, h)))
 Base.:(==)(r1::Record{T}, r2::Record{T}) where T = r1.description == r2.description && r1.sequence == r2.sequence && r1.quality == r2.quality
+Base.getindex(record::Record{T}, r::UnitRange{<:Integer}) where T = Record{T}(description(record), sequence(record)[r], quality(record)[r])
 
 import FASTX: quality
 

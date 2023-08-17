@@ -10,6 +10,7 @@
     @test qs1.values == qs2.values 
     @test length(qs1) == 4
     @test qs1[1] == 0
+    @test qs1[1:2] == QualityScores("!!")
 
     @test QualityScores(qs1) == qs1
     @test String(qs1) == "!!!!"

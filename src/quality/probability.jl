@@ -3,7 +3,8 @@
 
 @inline error_prob_function(qe::FASTX.FASTQ.QualityEncoding) = qe.low < qe.offset ? solexa_to_p : phred_to_p
 
-@inline error_prob_generator(qs::QualityScores) = let q_to_p = error_prob_function(qs.encoding)
+@inline function error_prob_generator(qs::QualityScores)
+    q_to_p = error_prob_function(qs.encoding)
     (q_to_p(q) for q in qs.values)
 end
 
