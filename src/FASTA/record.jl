@@ -45,6 +45,7 @@ end
 
 Base.hash(r::Record, h::UInt) = hash(r.description, hash(r.sequence, h))
 Base.:(==)(r1::Record{T}, r2::Record{T}) where T = r1.description == r2.description && r1.sequence == r2.sequence
+Base.getindex(record::Record{T}, r::UnitRange{<:Integer}) where T = Record{T}(description(record), sequence(record)[r])
 
 function BioSequences.reverse_complement(record::Record{T}) where T <: Union{LongDNA, LongRNA}
     Record{T}(description(record), reverse_complement(sequence(record)))
