@@ -35,10 +35,3 @@ GATTACA
 julia> (identifier(record), description(record), sequence(record))
 ("ricky", "ricky the record", GATTACA)
 ```
-
-```@index
-```
-
-```@autodocs
-Modules = [TypedFASTX]
-```

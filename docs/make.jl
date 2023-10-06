@@ -11,6 +11,7 @@ makedocs(;
     doctest = false,
     pages=[
         "Overview" => "index.md",
+        "API" => "api.md",
     ],
     authors = "Anton O. Sollman",
     checkdocs = :all
