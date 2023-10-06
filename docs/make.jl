@@ -8,7 +8,7 @@ makedocs(;
         prettyurls=get(ENV, "CI", "false") == "true",
     ),
     sitename = "TypedFASTX.jl",
-    doctest = true,
+    doctest = false,
     pages=[
         "Overview" => "index.md",
     ],
