@@ -24,10 +24,15 @@ struct Record{T} <: TypedRecord{T}
 end
 
 function Base.convert(::Type{Record{T}}, fastq_record::FASTX.FASTQ.Record, encoding::FASTX.FASTQ.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
-    Record{T}(
-        description(fastq_record),
-        sequence(T, fastq_record),
-        collect(FASTX.quality_scores(fastq_record, encoding)))
+    try
+        Record{T}(
+            description(fastq_record), sequence(T, fastq_record),
+            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding)), encoding))
+    catch
+        Record{T}(
+            description(fastq_record), sequence(fastq_record),
+            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding)), encoding))
+    end
 end
 
 function Base.convert(::Type{FASTX.FASTQ.Record}, record::Record{T}) where T

@@ -38,7 +38,15 @@ end
 
 # FASTX.Record -> TypedFASTA.Record
 function Base.convert(::Type{Record{T}}, record::FASTX.Record) where T
-    Record{T}(
+    try
+        Record{T}(description(record), sequence(T, record))
+    catch
+        Record{T}(description(record), sequence(record))
+    end
+end
+
+function Base.convert(::Type{FASTX.FASTA.Record}, record::TypedRecord{T}) where T
+    FASTX.FASTA.Record(
         description(record),
         sequence(String, record))
 end

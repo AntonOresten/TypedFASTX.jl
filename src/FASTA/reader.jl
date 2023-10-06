@@ -16,7 +16,7 @@ mutable struct Reader{T} <: TypedReader{T}
             FASTX.FASTA.index!(reader, index)
             seekrecord(reader, 1)
         end
-        new{T}(path, reader, 1)
+        new{T}(path, reader, 0)
     end
 end
 
@@ -44,7 +44,7 @@ import FASTX: seekrecord
 
 function seekrecord(reader::Reader{T}, i::Integer) where T
     seekrecord(reader.reader, i)
-    reader.position = i
+    reader.position = i - 1
 end
 
 function Base.getindex(reader::Reader{T}, s::AbstractString) where T
@@ -64,26 +64,24 @@ end
 function Base.getindex(reader::Reader{T}, r::UnitRange{<:Integer}) where T
     (r.start < 1 || r.stop > length(reader)) && error("Some indices outside of range $(1:length(reader))")
     seekrecord(reader, r.start)
-    Record{T}[convert(Record{T}, record) for (i, record) in zip(r, reader.reader)]
+    Record{T}[convert(Record{T}, record) for (_, record) in zip(r, reader.reader)]
 end
 
-function Base.iterate(reader::Reader{T}) where T
-    reader.position += 1
-    record_state = iterate(reader.reader)
-    isnothing(record_state) && return nothing
-    record, new_state = record_state
-    record = convert(Record{T}, record)
-    (record, new_state)
-end
-
-function Base.iterate(reader::Reader{T}, state) where T
+function Base.iterate(reader::Reader{T}, state=0) where T
     reader.position += 1
     record_state = iterate(reader.reader, state)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    record = convert(Record{T}, record)
-    (record, new_state)
+
+    try
+        record = convert(Record{T}, record)
+        return (record, new_state)
+    catch e
+        @warn "Skipping record at position $(reader.position) due to: $e"
+        return iterate(reader, new_state)  # Skip this record and move to the next
+    end
 end
+
 
 
 function Base.in(record::Record, reader::Reader{T}) where T
