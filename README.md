@@ -59,6 +59,3 @@ SMITH
 ```
 
 Check out the documentation for more detailed information on how to use the package.
-
-## Contributing
-Contributions are very welcome! If you'd like to contribute, GPT-4 suggests forking the repository and using a feature branch.
