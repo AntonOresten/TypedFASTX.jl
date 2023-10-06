@@ -72,9 +72,3 @@ Returns the sequence of `record`, converted to type T.
 function Base.summary(::TypedRecord{T}) where T
     string(TypedRecord{T})
 end
-
-function Base.convert(::Type{FASTX.FASTA.Record}, record::TypedRecord{T}) where T
-    FASTX.FASTA.Record(
-        description(record),
-        sequence(String, record))
-end

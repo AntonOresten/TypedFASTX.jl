@@ -39,23 +39,21 @@ function Base.show(io::IO, ::MIME"text/plain", reader::Reader{T}) where T
     print(io, "\n  position: ", reader.position)
 end
 
-function Base.iterate(reader::Reader{T}) where T
-    reader.position += 1
-    record_state = iterate(reader.reader)
-    isnothing(record_state) && return nothing
-    record, new_state = record_state
-    typed_record = convert(Record{T}, record, reader.encoding)
-    (typed_record, new_state)
-end
-
-function Base.iterate(reader::Reader{T}, state) where T
+function Base.iterate(reader::Reader{T}, state=0) where T
     reader.position += 1
     record_state = iterate(reader.reader, state)
     isnothing(record_state) && return nothing
     record, new_state = record_state
-    typed_record = convert(Record{T}, record, reader.encoding)
-    (typed_record, new_state)
+
+    try
+        record = convert(Record{T}, record)
+        return (record, new_state)
+    catch e
+        @warn "Skipping record due to error: $e"
+        return iterate(reader, new_state)
+    end
 end
+
 
 function Base.in(record::Record, ::Reader{T}) where T
     error("Can't check if $record is in TypedFASTQ.Reader because it wraps a FASTX.FASTQ.Reader without an index.")
