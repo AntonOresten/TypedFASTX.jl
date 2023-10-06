@@ -9,7 +9,7 @@ mutable struct Writer{T} <: TypedWriter{T}
     position::Int
 
     function Writer{T}(io::IO; path::String = "no path") where T
-        w = new{T}(path, io, 1)
+        w = new{T}(path, io, 0)
         finalizer(close, w)
         w
     end

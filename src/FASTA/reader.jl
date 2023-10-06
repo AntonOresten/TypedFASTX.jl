@@ -16,7 +16,7 @@ mutable struct Reader{T} <: TypedReader{T}
             FASTX.FASTA.index!(reader, index)
             seekrecord(reader, 1)
         end
-        new{T}(path, reader, 1)
+        new{T}(path, reader, 0)
     end
 end
 
@@ -44,7 +44,7 @@ import FASTX: seekrecord
 
 function seekrecord(reader::Reader{T}, i::Integer) where T
     seekrecord(reader.reader, i)
-    reader.position = i
+    reader.position = i - 1
 end
 
 function Base.getindex(reader::Reader{T}, s::AbstractString) where T
@@ -77,7 +77,7 @@ function Base.iterate(reader::Reader{T}, state=0) where T
         record = convert(Record{T}, record)
         return (record, new_state)
     catch e
-        @warn "Skipping record due to error: $e"
+        @warn "Skipping record at position $(reader.position) due to: $e"
         return iterate(reader, new_state)  # Skip this record and move to the next
     end
 end

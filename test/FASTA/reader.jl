@@ -32,7 +32,7 @@
         @test rec1 in reader
         @test !(AARecord("AASeq", "SMITH") in reader)
 
-        @test seekrecord(reader, 1) == 1
+        @test seekrecord(reader, 1) == 0
         @test rec1 == first(reader)
         seekrecord(reader, 1)
         @test all(in(reader), (r for r in reader))
@@ -63,13 +63,13 @@
         @test eltype(recs) == eltype(reader)
 
         @test index!(reader) == reader
-        @test seekrecord(reader, 1) == 1
+        @test seekrecord(reader, 1) == 0
     end
 
     @testset "show" begin
         @test summary(TypedFASTA.Reader{LongDNA{4}}(fasta_file)) == "DNAReader"
         @test repr(DNAReader(fasta_file)) == "DNAReader(\"data/seqs.fasta\")"
-        @test repr("text/plain", DNAReader(fasta_file)) == "DNAReader (FASTA):\n  path: \"data/seqs.fasta\"\n  position: 1" 
+        @test repr("text/plain", DNAReader(fasta_file)) == "DNAReader (FASTA):\n  path: \"data/seqs.fasta\"\n  position: 0" 
     end
 
 end

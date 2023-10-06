@@ -5,7 +5,7 @@
         w = TypedFASTQ.Writer{String}(io)
         @test w.path == "no path"
         @test w.io == io
-        @test w.position == 1
+        @test w.position == 0
         write(w, StringRecord("Rick", "ACGT", "!!!!"))
         @test String(take!(io)) == "@Rick\nACGT\n+\n!!!!\n"
     end
@@ -15,11 +15,11 @@
         w = TypedFASTQ.Writer{String}(path)
 
         @test repr(w) == "StringWriter(\"temp.fastq\")"
-        @test repr("text/plain", w) == "StringWriter (FASTQ):\n  path: \"temp.fastq\"\n  position: 1"
+        @test repr("text/plain", w) == "StringWriter (FASTQ):\n  path: \"temp.fastq\"\n  position: 0"
 
         @test w.path == path
         @test w.io isa IOStream
-        @test w.position == 1
+        @test w.position == 0
         write(w, StringRecord("Rick", "ACGT", "!!!!"))
         @test_throws ErrorException write(w, StringRecord("Rick", "ACGT"))
         @test_throws MethodError write(w, DNARecord("Rick", "ACGT"))

@@ -27,11 +27,11 @@ function Base.convert(::Type{Record{T}}, fastq_record::FASTX.FASTQ.Record, encod
     try
         Record{T}(
             description(fastq_record), sequence(T, fastq_record),
-            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding))), encoding)
+            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding)), encoding))
     catch
         Record{T}(
             description(fastq_record), sequence(fastq_record),
-            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding))), encoding)
+            QualityScores(collect(FASTX.quality_scores(fastq_record, encoding)), encoding))
     end
 end
 

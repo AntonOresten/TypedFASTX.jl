@@ -11,7 +11,7 @@ mutable struct Reader{T} <: TypedReader{T}
 
     function Reader{T}(path::String, encoding::FASTX.QualityEncoding = FASTX.FASTQ.SANGER_QUAL_ENCODING) where T
         fq_reader = FASTX.FASTQ.Reader(open(path), copy=false)
-        new{T}(path, fq_reader, 1, encoding)
+        new{T}(path, fq_reader, 0, encoding)
     end
 end
 
@@ -49,7 +49,7 @@ function Base.iterate(reader::Reader{T}, state=0) where T
         record = convert(Record{T}, record)
         return (record, new_state)
     catch e
-        @warn "Skipping record due to error: $e"
+        @warn "Skipping record at position $(reader.position) (line $(4*reader.position-3)) due to: $e"
         return iterate(reader, new_state)
     end
 end
